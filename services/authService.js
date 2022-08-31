@@ -7,12 +7,17 @@ const {
 const SALT_ROUND = 10;
 
 class authService {
+
+    // ------------------------- Register ------------------------- //
+
     static async register({
         userName,
         email,
         password,
     }) {
-        // Payload Validation
+
+        // ------------------------- Payload Validation ------------------------- //
+
         if (!userName) {
             return {
                 status: false,
@@ -84,14 +89,21 @@ class authService {
                     registeredUsers: createdUser,
                 },
             };
-        }
-    }
+        };
+    };
+
+    // ------------------------- End Register ------------------------- //
+
+
+    // ------------------------- Login ------------------------- //
 
     static async login({
         userName,
         password,
     }) {
-        // Payload Validation
+
+        // ------------------------- Payload Validation ------------------------- //
+
         if (!userName) {
             return {
                 status: false,
@@ -167,7 +179,9 @@ class authService {
                 };
             }
         }
-    }
+    };
+
+    // ------------------------- End Login ------------------------- //
 }
 
 module.exports = authService;

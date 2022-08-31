@@ -1,5 +1,7 @@
 const userService = require('../services/userService');
 
+// ------------------------- Get All Users ------------------------- //
+
 const getAllUsers = async (req, res) => {
     const {
         status,
@@ -14,6 +16,11 @@ const getAllUsers = async (req, res) => {
         data: data,
     });
 };
+
+// ------------------------- End Get All Users ------------------------- //
+
+
+// ------------------------- Get User By Id ------------------------- //
 
 const getUserById = async (req, res) => {
     const {
@@ -35,6 +42,11 @@ const getUserById = async (req, res) => {
         data: data,
     });
 };
+
+// ------------------------- End Get User By Id ------------------------- //
+
+
+// ------------------------- Update User By Id ------------------------- //
 
 const updateUserById = async (req, res, next) => {
     const {
@@ -65,8 +77,11 @@ const updateUserById = async (req, res, next) => {
     });
 };
 
+// ------------------------- End Update User By Id ------------------------- //
+
+
 module.exports = {
     getAllUsers,
     getUserById,
     updateUserById,
-}
+};

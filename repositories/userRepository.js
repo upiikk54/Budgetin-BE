@@ -3,11 +3,19 @@ const {
 } = require("../models");
 
 class userRepository {
+
+    // ------------------------- Get All Users ------------------------- //
+
     static async getAllUsers() {
         const getUser = await users.findAll();
 
         return getUser;
-    }
+    };
+
+    // ------------------------- End Get All Users ------------------------- //
+
+    
+    // ------------------------- Get User By Id ------------------------- //
 
     static async getUserById({
         id
@@ -19,7 +27,13 @@ class userRepository {
         });
 
         return getUser;
-    }
+    };
+
+    // ------------------------- End Get User By Id ------------------------- //
+
+
+    // ------------------------- Get Users By Username ------------------------- //
+
     static async getUsersByUsername({
         userName
     }) {
@@ -30,7 +44,13 @@ class userRepository {
         });
 
         return getUser;
-    }
+    };
+
+    // ------------------------- End Get Users By Username ------------------------- //
+
+
+    // ------------------------- Get Users By By Email ------------------------- //
+
     static async getUsersByEmail({
         email
     }) {
@@ -41,7 +61,12 @@ class userRepository {
         });
 
         return getUser;
-    }
+    };
+
+    // ------------------------- End Get Users By By Email ------------------------- //
+
+
+    // ------------------------- Register ------------------------- //
 
     static async register({
         userName,
@@ -56,6 +81,11 @@ class userRepository {
 
         return registeredUser;
     }
+
+    // ------------------------- End Register ------------------------- //
+
+
+    // ------------------------- Update User By Id ------------------------- //
 
     static async updateUserById({
         id,
@@ -75,6 +105,8 @@ class userRepository {
 
         return updateUserById;
     }
+
+    // ------------------------- End Update User By Id ------------------------- //
 }
 
 module.exports = userRepository;

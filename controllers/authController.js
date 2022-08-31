@@ -1,5 +1,7 @@
 const authService = require("../services/authService");
 
+// ------------------------- Auth Register ------------------------- //
+
 const register = async (req, res) => {
     const {
         userName,
@@ -16,14 +18,19 @@ const register = async (req, res) => {
         userName,
         email,
         password
-    })
+    });
 
     res.status(statusCode).send({
         status: status,
         message: message,
         data: data
-    })
-}
+    });
+};
+
+// ------------------------- End Auth Register ------------------------- //
+
+
+// ------------------------- Auth Login ------------------------- //
 
 const login = async (req, res) => {
     const {
@@ -39,14 +46,19 @@ const login = async (req, res) => {
     } = await authService.login({
         userName,
         password
-    })
+    });
 
     res.status(statusCode).send({
         status: status,
         message: message,
         data: data
-    })
-}
+    });
+};
+
+// ------------------------- End Auth Login ------------------------- //
+
+
+// ------------------------- Auth Current User ------------------------- //
 
 const currentUser = async (req, res) => {
     const currentUser = req.user;
@@ -58,10 +70,13 @@ const currentUser = async (req, res) => {
             user: currentUser,
         }
     });
-}
+};
+
+// ------------------------- End Auth Current User ------------------------- //
+
 
 module.exports = {
     register,
     login,
     currentUser
-}
+};
