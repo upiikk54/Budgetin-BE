@@ -2,6 +2,7 @@ const userRepository = require("../repositories/userRepository");
 const cloudinary = require("../utils/cloudinary");
 
 class userService {
+    // ------------------------- Get All Users ------------------------- //
     static async getAllUsers() {
         const getAllUsers = await userRepository.getAllUsers();
         return {
@@ -13,7 +14,10 @@ class userService {
             },
         };
     }
+    // ------------------------- End Get All Users ------------------------- //
 
+
+    // ------------------------- Get User By Id ------------------------- //
     static async getUserById({
         id,
     }) {
@@ -29,11 +33,14 @@ class userService {
             },
         };
     }
+    // ------------------------- Get User By Id ------------------------- //
 
+
+    // ------------------------- Update User By Id ------------------------- //
     static async updateUserById({
         id,
-        tanggal_lahir,
-        jenis_kelamin,
+        dateOfBirth,
+        gender,
         image
     }) {
         const getUserById = await userRepository.getUserById({
@@ -56,8 +63,8 @@ class userService {
 
             const updatedUser = await userRepository.updateUserById({
                 id,
-                tanggal_lahir,
-                jenis_kelamin,
+                dateOfBirth,
+                gender,
                 image: images
             });
 
@@ -80,8 +87,8 @@ class userService {
                 },
             };
         }
-
     }
+    // ------------------------- End Update User By Id ------------------------- //
 }
 
 module.exports = userService;

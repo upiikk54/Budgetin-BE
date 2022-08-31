@@ -7,6 +7,8 @@ const {
 const SALT_ROUND = 10;
 
 class authService {
+
+    // ------------------------- Register ------------------------- //
     static async register({
         userName,
         email,
@@ -86,7 +88,10 @@ class authService {
             };
         }
     }
+    // ------------------------- End Register ------------------------- //
 
+
+    // ------------------------- Login ------------------------- //
     static async login({
         userName,
         password,
@@ -168,6 +173,7 @@ class authService {
             }
         }
     }
+    // ------------------------- Login ------------------------- //
 }
 
 module.exports = authService;

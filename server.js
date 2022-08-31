@@ -12,23 +12,33 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors());
 
-// import controller
+// ------------------- Import Controller ------------------- //
 const authController = require("./controllers/authController");
 const userController = require("./controllers/userController");
+// ------------------- End Import Controller ------------------- //
 
-// import middlewares
+
+// ------------------- Import Middlewares ------------------- //
 const middlewares = require("./middlewares/auth");
+// ------------------- End Import Middlewares ------------------- //
 
-// define Routes Auth
+
+// ------------------- Define Routes Auth ------------------- //
 app.post("/auth/register", authController.register);
 app.post("/auth/login", authController.login);
 app.get("/auth/me",middlewares.authenticate, authController.currentUser);
+// ------------------- End Define Routes Auth ------------------- //
 
-// define Routes Users
+
+// ------------------- Define Routes Users ------------------- //
 app.get("/api/users", userController.getAllUsers);
 app.get("/api/users/:id", middlewares.authenticate, userController.getUserById);
 app.put("/api/users/:id", middlewares.authenticate, upload.single("image"), userController.updateUserById);
+// ------------------- Define Routes Users ------------------- //
 
+
+// ------------------- Listen Server ------------------- //
 app.listen(process.env.PORT || PORT, () => {
     console.log(`Server berhasil berjalan di port http://localhost:${process.env.PORT || PORT}`);
 });
+// ------------------- End Listen Server ------------------- //

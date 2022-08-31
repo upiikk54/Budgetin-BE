@@ -1,5 +1,6 @@
 const authService = require("../services/authService");
 
+// ------------------------- Auth Register ------------------------- //
 const register = async (req, res) => {
     const {
         userName,
@@ -24,7 +25,10 @@ const register = async (req, res) => {
         data: data
     })
 }
+// ------------------------- End Auth Register ------------------------- //
 
+
+// ------------------------- Auth Login ------------------------- //
 const login = async (req, res) => {
     const {
         userName,
@@ -47,7 +51,10 @@ const login = async (req, res) => {
         data: data
     })
 }
+// ------------------------- End Auth Login ------------------------- //
 
+
+// ------------------------- Auth Current User ------------------------- //
 const currentUser = async (req, res) => {
     const currentUser = req.user;
 
@@ -59,6 +66,7 @@ const currentUser = async (req, res) => {
         }
     });
 }
+// ------------------------- End Auth Current User ------------------------- //
 
 module.exports = {
     register,

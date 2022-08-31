@@ -3,12 +3,17 @@ const {
 } = require("../models");
 
 class userRepository {
+
+    // ------------------------- Get All Users ------------------------- //
     static async getAllUsers() {
         const getUser = await users.findAll();
 
         return getUser;
     }
+    // ------------------------- End Get All Users ------------------------- //
 
+
+    // ------------------------- Get User By Id ------------------------- //
     static async getUserById({
         id
     }) {
@@ -20,6 +25,10 @@ class userRepository {
 
         return getUser;
     }
+    // ------------------------- End Get User By Id ------------------------- //
+
+
+    // ------------------------- Get User By userName ------------------------- //
     static async getUsersByUsername({
         userName
     }) {
@@ -31,6 +40,10 @@ class userRepository {
 
         return getUser;
     }
+    // ------------------------- End Get User By userName ------------------------- //
+
+
+    // ------------------------- Get User By Email ------------------------- //
     static async getUsersByEmail({
         email
     }) {
@@ -42,7 +55,10 @@ class userRepository {
 
         return getUser;
     }
+    // ------------------------- End Get User By Email ------------------------- //
 
+
+    // ------------------------- Register ------------------------- //
     static async register({
         userName,
         email,
@@ -56,16 +72,19 @@ class userRepository {
 
         return registeredUser;
     }
+    // ------------------------- End Register ------------------------- //
 
+    
+    // ------------------------- Update User By Id ------------------------- //
     static async updateUserById({
         id,
-        tanggal_lahir,
-        jenis_kelamin,
+        dateOfBirth,
+        gender,
         image
     }) {
         const updateUserById = await users.update({
-            tanggal_lahir,
-            jenis_kelamin,
+            dateOfBirth,
+            gender,
             image
         }, {
             where: {
@@ -75,6 +94,7 @@ class userRepository {
 
         return updateUserById;
     }
+    // ------------------------- End Update User By Id ------------------------- //
 }
 
 module.exports = userRepository;

@@ -17,10 +17,10 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      tanggal_lahir: {
+      dateOfBirth: {
         type: Sequelize.STRING
       },
-      jenis_kelamin: {
+      gender: {
         type: Sequelize.STRING
       },
       image: {
