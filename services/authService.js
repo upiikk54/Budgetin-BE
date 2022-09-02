@@ -7,7 +7,8 @@ const {
 const SALT_ROUND = 10;
 const upperCaseLetters  = /[A-Z]/g;
 const numbers  = /[0-9]/g;
-
+const addEmail =/[@]/g;
+const dotEmail =/[.]/g;
 class authService {
 
     // ------------------------- Register ------------------------- //
@@ -21,6 +22,9 @@ class authService {
         // ------------------------- Payload Validation ------------------------- //
         const passworUppercase = password.match(upperCaseLetters);
         const passworNumbers = password.match(numbers);
+        const validationAddEmail = email.match(addEmail);
+        const validationDotEmail = email.match(dotEmail);
+
         if (!userName) {
             return {
                 status: false,
@@ -46,6 +50,24 @@ class authService {
                 status: false,
                 statusCode: 400,
                 message: "Email is required",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        } else if (!validationAddEmail) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password must have '@' in email",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        } else if (!validationDotEmail) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password must have '.' in email",
                 data: {
                     registeredUsers: null,
                 },
@@ -88,7 +110,7 @@ class authService {
                     registeredUsers: null,
                 },
             };
-        }
+        } 
 
         const getUserByEmail = await userRepository.getUsersByEmail({
             email
@@ -135,6 +157,7 @@ class authService {
         // ------------------------- Payload Validation ------------------------- //
         const passworUppercase = password.match(upperCaseLetters);
         const passworNumbers = password.match(numbers);
+        
         if (!userName) {
             return {
                 status: false,
