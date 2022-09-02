@@ -20,14 +20,14 @@ const authenticate = async (req, res, next) => {
 
     try {
         const {
-            userName
+            email
         } = jwt.verify(token, JWT.SECRET);
 
-        const getUsersByUsername = await userRepository.getUsersByUsername({
-            userName
+        const getUsersByEmail = await userRepository.getUsersByEmail({
+            email
         });
 
-        req.user = getUsersByUsername;
+        req.user = getUsersByEmail;
 
         next();
     } catch (err) {

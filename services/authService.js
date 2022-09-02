@@ -5,6 +5,8 @@ const {
     JWT
 } = require("../lib/const");
 const SALT_ROUND = 10;
+const upperCaseLetters  = /[A-Z]/g;
+const numbers  = /[0-9]/g;
 
 class authService {
 
@@ -17,12 +19,22 @@ class authService {
     }) {
 
         // ------------------------- Payload Validation ------------------------- //
-
+        const passworUppercase = password.match(upperCaseLetters);
+        const passworNumbers = password.match(numbers);
         if (!userName) {
             return {
                 status: false,
                 statusCode: 400,
                 message: "userName is required",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        } else if (userName.length >= 15) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "username maximum 15 characters",
                 data: {
                     registeredUsers: null,
                 },
@@ -54,6 +66,24 @@ class authService {
                 status: false,
                 statusCode: 400,
                 message: "Password minimum 8 characters",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        } else if (!passworUppercase) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password must have uppercase",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        } else if (!passworNumbers) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password must have numbers",
                 data: {
                     registeredUsers: null,
                 },
@@ -103,7 +133,8 @@ class authService {
     }) {
 
         // ------------------------- Payload Validation ------------------------- //
-
+        const passworUppercase = password.match(upperCaseLetters);
+        const passworNumbers = password.match(numbers);
         if (!userName) {
             return {
                 status: false,
@@ -111,6 +142,15 @@ class authService {
                 message: "Username is required",
                 data: {
                     loginUsers: null,
+                },
+            };
+        } else if (userName.length >= 15) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Username or Password is wrong",
+                data: {
+                    registeredUsers: null,
                 },
             };
         }
@@ -128,9 +168,27 @@ class authService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password minimum 8 characters",
+                message: "Username or Password is wrong",
                 data: {
                     loginUsers: null,
+                },
+            };
+        } else if (!passworUppercase) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Username or Password is wrong",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        } else if (!passworNumbers) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Username or Password is wrong",
+                data: {
+                    registeredUsers: null,
                 },
             };
         }
@@ -143,7 +201,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 404,
-                message: "Email not registered",
+                message: "Username or Password is wrong",
                 data: {
                     loginUsers: null,
                 },
@@ -154,7 +212,7 @@ class authService {
             if (isPasswordMatch) {
                 const token = jwt.sign({
                         id: getUsersByUsername.id,
-                        userName: getUsersByUsername.userName
+                        email: getUsersByUsername.email
                     },
                     JWT.SECRET, {
                         expiresIn: JWT.EXPIRED,
@@ -172,7 +230,7 @@ class authService {
                 return {
                     status: true,
                     statusCode: 400,
-                    message: "password wrong",
+                    message: "Username or Password is wrong",
                     data: {
                         user: null,
                     },
