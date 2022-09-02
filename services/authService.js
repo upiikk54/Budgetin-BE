@@ -9,6 +9,7 @@ const upperCaseLetters  = /[A-Z]/g;
 const numbers  = /[0-9]/g;
 const addEmail =/[@]/g;
 const dotEmail =/[.]/g;
+const spacing = /[\s]/;
 class authService {
 
     // ------------------------- Register ------------------------- //
@@ -22,6 +23,7 @@ class authService {
         // ------------------------- Payload Validation ------------------------- //
         const passworUppercase = password.match(upperCaseLetters);
         const passworNumbers = password.match(numbers);
+        const passwordSpacing = password.match(spacing);
         const validationAddEmail = email.match(addEmail);
         const validationDotEmail = email.match(dotEmail);
 
@@ -110,7 +112,16 @@ class authService {
                     registeredUsers: null,
                 },
             };
-        } 
+        } else if (passwordSpacing) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password cannot be spaced",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        }
 
         const getUserByEmail = await userRepository.getUsersByEmail({
             email
@@ -157,7 +168,8 @@ class authService {
         // ------------------------- Payload Validation ------------------------- //
         const passworUppercase = password.match(upperCaseLetters);
         const passworNumbers = password.match(numbers);
-        
+        const passwordSpacing = password.match(spacing);
+
         if (!userName) {
             return {
                 status: false,
@@ -206,6 +218,15 @@ class authService {
                 },
             };
         } else if (!passworNumbers) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Username or Password is wrong",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        } else if (passwordSpacing) {
             return {
                 status: false,
                 statusCode: 400,
