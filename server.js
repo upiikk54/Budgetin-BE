@@ -33,6 +33,7 @@ const middlewares = require("./middlewares/auth");
 app.post("/auth/register", authController.register);
 app.post("/auth/login", authController.login);
 app.get("/auth/me",middlewares.authenticate, authController.currentUser);
+app.put("/auth/forgotpassword", authController.handleForgotPassword);
 
 // ------------------- End Define Routes Auth ------------------- //
 
@@ -42,6 +43,7 @@ app.get("/auth/me",middlewares.authenticate, authController.currentUser);
 app.get("/api/users", userController.getAllUsers);
 app.get("/api/users/:id", middlewares.authenticate, userController.getUserById);
 app.put("/api/users/:id", middlewares.authenticate, upload.single("image"), userController.updateUserById);
+app.put("/api/resetpassword/:id", userController.resetPasswordById);
 
 // ------------------- Define Routes Users ------------------- //
 

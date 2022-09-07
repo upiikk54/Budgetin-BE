@@ -75,8 +75,29 @@ const currentUser = async (req, res) => {
 // ------------------------- End Auth Current User ------------------------- //
 
 
+// ------------------------- Auth Forgot Password ------------------------- //
+
+const handleForgotPassword = async (req, res) => {
+
+    const {email} = req.body;
+
+    const {status, status_code, message, data} = await authService.handleForgotPassword({
+        email
+    });
+
+    res.status(status_code).send({
+        status : status,
+        message: message,
+        data : data,
+    });
+
+}
+
+// ------------------------- End Forgot Password ------------------------- //
+
 module.exports = {
     register,
     login,
-    currentUser
+    currentUser,
+    handleForgotPassword
 };

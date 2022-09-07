@@ -10,6 +10,7 @@ const numbers  = /[0-9]/g;
 const addEmail =/[@]/g;
 const dotEmail =/[.]/g;
 const spacing = /[\s]/;
+
 class authService {
 
     // ------------------------- Register ------------------------- //
@@ -60,7 +61,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password must have '@' in email",
+                message: "Email must have @",
                 data: {
                     registeredUsers: null,
                 },
@@ -69,7 +70,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password must have '.' in email",
+                message: "Email must have .",
                 data: {
                     registeredUsers: null,
                 },
@@ -284,6 +285,130 @@ class authService {
     };
 
     // ------------------------- End Login ------------------------- //
+
+
+    // ------------------------- Auth Forgot Password ------------------------- //
+
+    static async handleForgotPassword({ email }){
+
+        // ------------------------- Payload Validation ------------------------- //
+        
+        if(!email){
+            return {
+                status: false,
+                status_code: 400,
+                message: "Email wajib diisi",
+                data : {
+                    forgot_password: null,
+                },
+            };
+        }
+
+        const getUser = await userRepository.getUsersByEmail({email: email});
+
+        if (!getUser){
+            return{
+                status: false,
+                status_code: 404,
+                message: "Email belum terdaftar",
+                data: {
+                    user: null,
+                },
+            };
+        } else {
+            
+            const token = jwt.sign ({
+                id : getUser.id,
+            }, 
+            JWT.SECRET,
+            {
+            expiresIn: JWT.EXPIRED,
+            });
+
+            const emailTemplates = {
+                from: 'BudgetInApp',
+                to: email,
+                subject: 'Konfirmasi Reset Password Akun BudgetIn Kamu',
+                html: 
+                `   <!DOCTYPE html>
+                    <html>
+                        <head>
+
+                        <style>
+
+                            section{
+                                background-color: #d8f3dc;
+                                padding: 8%;
+                            }
+                            .content{
+                                width: 80%;
+                                justify-content: center;
+                                margin: 0 auto;
+                                padding: 2%;
+                                background-color: #fff;
+                            }
+
+                            p{
+                                font-size: 16px;
+                            }
+
+                            a.btn{
+                                top: 8%;
+                                padding: 12px 9px;
+                                text-decoration: none;
+                                color: #000;
+                                font-weight: 600;
+                                background-color: #d8f3dc;
+                                border-radius: 10px;
+                                margin-left: 40%;
+                                margin-right: -40%;
+                            }
+
+                            .decision-click,
+                            .token{
+                                text-align: center;
+                                background-color: #fff;
+                            }
+
+                        </style>
+
+                        </head>
+                        <body>
+                            <section>
+                                
+                                <div class="content">
+                                    
+                                    <h2> Halo ${getUser.name}, </h2>
+                                    
+                                    <p>Untuk mengkonfirmasi permintaan reset password akun BudgetIn kamu, silakan klik tombol di bawah ini.</p>
+                                    
+                                    <a class="btn" href="https://budgetin.com/resetpassword?token=${token}">Reset Password</a>
+                    
+                                    <p class="decision-click">Atau klik tautan di bawah ini: </p>
+                                    
+                                    <p class="token"> https://budgetin.com/resetpassword?token=${token} </p>
+
+                                    <p> Jika kamu tidak meminta reset password, silakan abaikan email ini.</p>
+                                </div>
+                            </section>    
+                        </body>
+                    </html>
+                `
+            };
+
+            passwordResetEmail(emailTemplates);
+
+            return{
+                status: true,
+                status_code: 201,
+                message: "Reset password terkirim ke email user!"
+            };
+
+        }
+
+    }
+
+    // ------------------------- End Auth Forgot Password ------------------------- //
 }
 
 module.exports = authService;

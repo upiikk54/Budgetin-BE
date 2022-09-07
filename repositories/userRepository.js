@@ -107,6 +107,26 @@ class userRepository {
     }
 
     // ------------------------- End Update User By Id ------------------------- //
+
+
+    // ------------------------- Update User By Id ------------------------- //
+
+    static async resetPasswordById({
+        id,
+        password
+    }) {
+        const resetPasswordById = await users.update({
+            password
+        }, {
+            where: {
+                id
+            }
+        });
+
+        return resetPasswordById;
+    }
+
+    // ------------------------- End Update User By Id ------------------------- //
 }
 
 module.exports = userRepository;
