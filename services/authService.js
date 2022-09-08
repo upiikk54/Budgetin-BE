@@ -11,6 +11,8 @@ const addEmail =/[@]/g;
 const dotEmail =/[.]/g;
 const spacing = /[\s]/;
 
+const { passwordResetEmail } = require("../helper/nodemailer");
+
 class authService {
 
     // ------------------------- Register ------------------------- //
@@ -398,15 +400,20 @@ class authService {
 
             passwordResetEmail(emailTemplates);
 
+            const updateToken = await userRepository.handleUpdateUserToken({ email, token});
+
             return{
                 status: true,
                 status_code: 201,
-                message: "Reset password terkirim ke email user!"
+                message: "Reset password terkirim ke email user!",
+                data:{
+                    updateToken
+                }
             };
 
         }
 
-    }
+    };
 
     // ------------------------- End Auth Forgot Password ------------------------- //
 }

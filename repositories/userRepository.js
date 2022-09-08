@@ -80,7 +80,7 @@ class userRepository {
         });
 
         return registeredUser;
-    }
+    };
 
     // ------------------------- End Register ------------------------- //
 
@@ -104,7 +104,7 @@ class userRepository {
         });
 
         return updateUserById;
-    }
+    };
 
     // ------------------------- End Update User By Id ------------------------- //
 
@@ -124,9 +124,24 @@ class userRepository {
         });
 
         return resetPasswordById;
-    }
+    };
 
     // ------------------------- End Update User By Id ------------------------- //
-}
+
+    // ------------------------- Update User Token  ------------------------- //
+
+    static async handleUpdateUserToken({ email, token }){
+
+        const updateToken = await users.update({
+            resetPasswordToken: token
+        }, {
+            where: { email }
+        });
+
+        return updateToken;
+    };
+
+    // ------------------------- End Update User Token  ------------------------- //
+};
 
 module.exports = userRepository;
