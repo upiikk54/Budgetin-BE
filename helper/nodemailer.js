@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+require("dotenv").config();
 
 exports.passwordResetEmail = emailData => {
 
@@ -8,8 +9,8 @@ exports.passwordResetEmail = emailData => {
         secure: false,
         requireTLS: true,
         auth: {
-            user: 'appbudgetin@gmail.com',
-            pass: 'lkgndgfhcfdeheeu'
+            user: process.env.NODEMAILER_USER,
+            pass: process.env.NODEMAILER_PASSWORD
         },
     });
     
