@@ -43,7 +43,6 @@ app.put("/auth/forgotpassword", authController.handleForgotPassword);
 app.get("/api/users", userController.getAllUsers);
 app.get("/api/users/:id", middlewares.authenticate, userController.getUserById);
 app.put("/api/users/:id", middlewares.authenticate, upload.single("image"), userController.updateUserById);
-app.put("/api/resetpassword/:id", userController.resetPasswordById);
 
 // ------------------- Define Routes Users ------------------- //
 
