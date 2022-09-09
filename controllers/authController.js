@@ -95,9 +95,32 @@ const handleForgotPassword = async (req, res) => {
 
 // ------------------------- End Forgot Password ------------------------- //
 
+
+// ------------------------- Reset Password ------------------------- //
+
+const handleResetPassword = async (req, res) => {
+
+    const { token, password } = req.body;
+
+    const {status, status_code, message, data} = await authService.handleResetPassword({
+        token,
+        password,
+    });
+
+    res.status(status_code).send({
+        status : status,
+        message: message,
+        data : data,
+    });
+
+};
+
+// ------------------------- End Reset Password ------------------------- //
+
 module.exports = {
     register,
     login,
     currentUser,
-    handleForgotPassword
+    handleForgotPassword,
+    handleResetPassword
 };

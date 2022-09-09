@@ -5,10 +5,10 @@ const {
     JWT
 } = require("../lib/const");
 const SALT_ROUND = 10;
-const upperCaseLetters  = /[A-Z]/g;
-const numbers  = /[0-9]/g;
-const addEmail =/[@]/g;
-const dotEmail =/[.]/g;
+const upperCaseLetters = /[A-Z]/g;
+const numbers = /[0-9]/g;
+const addEmail = /[@]/g;
+const dotEmail = /[.]/g;
 const spacing = /[\s]/;
 
 const { passwordResetEmail } = require("../helper/nodemailer");
@@ -258,12 +258,12 @@ class authService {
 
             if (isPasswordMatch) {
                 const token = jwt.sign({
-                        id: getUsersByUsername.id,
-                        email: getUsersByUsername.email
-                    },
+                    id: getUsersByUsername.id,
+                    email: getUsersByUsername.email
+                },
                     JWT.SECRET, {
-                        expiresIn: JWT.EXPIRED,
-                    });
+                    expiresIn: JWT.EXPIRED,
+                });
 
                 return {
                     status: true,
@@ -289,27 +289,28 @@ class authService {
     // ------------------------- End Login ------------------------- //
 
 
-    // ------------------------- Auth Forgot Password ------------------------- //
 
-    static async handleForgotPassword({ email }){
+    // ------------------------- Forgot Password ------------------------- //
+
+    static async handleForgotPassword({ email }) {
 
         // ------------------------- Payload Validation ------------------------- //
-        
-        if(!email){
+
+        if (!email) {
             return {
                 status: false,
                 status_code: 400,
                 message: "Email wajib diisi",
-                data : {
+                data: {
                     forgot_password: null,
                 },
             };
         }
 
-        const getUser = await userRepository.getUsersByEmail({email: email});
+        const getUser = await userRepository.getUsersByEmail({ email: email });
 
-        if (!getUser){
-            return{
+        if (!getUser) {
+            return {
                 status: false,
                 status_code: 404,
                 message: "Email belum terdaftar",
@@ -318,21 +319,21 @@ class authService {
                 },
             };
         } else {
-            
-            const token = jwt.sign ({
-                id : getUser.id,
-            }, 
-            JWT.SECRET,
-            {
-            expiresIn: JWT.EXPIRED,
-            });
+
+            const token = jwt.sign({
+                id: getUser.id,
+            },
+                JWT.SECRET,
+                {
+                    expiresIn: JWT.EXPIRED,
+                });
 
             const emailTemplates = {
                 from: 'BudgetInApp',
                 to: email,
                 subject: 'Konfirmasi Reset Password Akun BudgetIn Kamu',
-                html: 
-                `   <!DOCTYPE html>
+                html:
+                    `   <!DOCTYPE html>
                     <html>
                         <head>
 
@@ -380,7 +381,7 @@ class authService {
                                 
                                 <div class="content">
                                     
-                                    <h2> Halo ${getUser.name}, </h2>
+                                    <h2> Halo ${getUser.email}, </h2>
                                     
                                     <p>Untuk mengkonfirmasi permintaan reset password akun BudgetIn kamu, silakan klik tombol di bawah ini.</p>
                                     
@@ -400,22 +401,63 @@ class authService {
 
             passwordResetEmail(emailTemplates);
 
-            const updateToken = await userRepository.handleUpdateUserToken({ email, token});
+            const updateToken = await userRepository.handleUpdateUserToken({ email, token });
 
-            return{
+            return {
                 status: true,
                 status_code: 201,
                 message: "Reset password terkirim ke email user!",
-                data:{
+                data: {
                     updateToken
                 }
             };
-
         }
-
     };
 
-    // ------------------------- End Auth Forgot Password ------------------------- //
-}
+    // ------------------------- End Forgot Password ------------------------- //
+
+
+
+    // ------------------------- Reset Password ------------------------- //
+
+    static async handleResetPassword({ token, password }) {
+
+        const getUserData = await userRepository.handleGetUserToken({
+            token,
+            password
+        });
+
+        if (getUserData.resetPasswordToken == token) {
+
+            const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
+
+            const updateUserPassword = await userRepository.handleUpdateUserPassword({
+                token,
+                password: hashedPassword
+            });
+
+            return {
+                status: true,
+                status_code: 201,
+                message: "User berhasil ganti password",
+                data: {
+                    updateUserPassword,
+                },
+            };
+        } else {
+            return {
+                status: false,
+                status_code: 401,
+                message: "Resource Unauthorized",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        }
+    };
+
+    // ------------------------- End Reset Password ------------------------- //
+
+};
 
 module.exports = authService;

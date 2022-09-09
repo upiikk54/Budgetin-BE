@@ -109,25 +109,6 @@ class userRepository {
     // ------------------------- End Update User By Id ------------------------- //
 
 
-    // ------------------------- Update User By Id ------------------------- //
-
-    static async resetPasswordById({
-        id,
-        password
-    }) {
-        const resetPasswordById = await users.update({
-            password
-        }, {
-            where: {
-                id
-            }
-        });
-
-        return resetPasswordById;
-    };
-
-    // ------------------------- End Update User By Id ------------------------- //
-
     // ------------------------- Update User Token  ------------------------- //
 
     static async handleUpdateUserToken({ email, token }){
@@ -142,6 +123,38 @@ class userRepository {
     };
 
     // ------------------------- End Update User Token  ------------------------- //
+
+    // ------------------------- Get User Token  ------------------------- //
+
+    static async handleGetUserToken({ token, password }){
+
+        const getUserData = await users.findOne({
+            where: {
+                resetPasswordToken: token
+            }
+        });
+
+        return getUserData;
+    }
+
+    // ------------------------- End Get User Token  ------------------------- //
+
+
+    // ------------------------- Update User Password  ------------------------- //
+    
+    static async handleUpdateUserPassword({ token, password }){
+
+        const updateUserPassword = await users.update({
+            password
+
+        }, {
+            where: { resetPasswordToken: token }
+        });
+
+        return updateUserPassword;
+    }
+    
+    // ------------------------- End Update User Password  ------------------------- //
 };
 
 module.exports = userRepository;
