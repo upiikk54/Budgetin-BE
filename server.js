@@ -34,6 +34,7 @@ app.post("/auth/register", authController.register);
 app.post("/auth/login", authController.login);
 app.get("/auth/me",middlewares.authenticate, authController.currentUser);
 app.put("/auth/forgotpassword", authController.handleForgotPassword);
+app.put("/auth/resetpassword", authController.handleResetPassword);
 
 // ------------------- End Define Routes Auth ------------------- //
 
