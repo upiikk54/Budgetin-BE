@@ -299,7 +299,7 @@ class authService {
         if (!email) {
             return {
                 status: false,
-                status_code: 400,
+                statusCode: 400,
                 message: "Email wajib diisi",
                 data: {
                     forgot_password: null,
@@ -312,7 +312,7 @@ class authService {
         if (!getUser) {
             return {
                 status: false,
-                status_code: 404,
+                statusCode: 404,
                 message: "Email belum terdaftar",
                 data: {
                     user: null,
@@ -405,7 +405,7 @@ class authService {
 
             return {
                 status: true,
-                status_code: 201,
+                statusCode: 201,
                 message: "Reset password terkirim ke email user!",
                 data: {
                     updateToken
@@ -421,6 +421,58 @@ class authService {
     // ------------------------- Reset Password ------------------------- //
 
     static async handleResetPassword({ token, password }) {
+
+        // ------------------------- Payload Validation ------------------------- //
+        const passwordUppercase = password.match(upperCaseLetters);
+        const passwordNumbers = password.match(numbers);
+        const passwordSpacing = password.match(spacing);
+
+        if (!password) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password is required",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        } else if (password.length < 8) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password must more than 8",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        } else if (!passwordUppercase) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password must have Uppercase",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        } else if (!passwordNumbers) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password must have Number",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        } else if (passwordSpacing) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password doesn't allow spaces",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        }
 
         const getUserData = await userRepository.handleGetUserToken({
             token,
@@ -438,7 +490,7 @@ class authService {
 
             return {
                 status: true,
-                status_code: 201,
+                statusCode: 201,
                 message: "User berhasil ganti password",
                 data: {
                     updateUserPassword,
@@ -447,7 +499,7 @@ class authService {
         } else {
             return {
                 status: false,
-                status_code: 401,
+                statusCode: 401,
                 message: "Resource Unauthorized",
                 data: {
                     resetPassword: null,

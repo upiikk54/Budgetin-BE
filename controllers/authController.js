@@ -63,7 +63,7 @@ const login = async (req, res) => {
 const currentUser = async (req, res) => {
     const currentUser = req.user;
 
-    res.status (200).send({
+    res.status(200).send({
         status: true,
         message: "Get current user success.",
         data: {
@@ -81,11 +81,11 @@ const handleForgotPassword = async (req, res) => {
 
     const {email} = req.body;
 
-    const {status, status_code, message, data} = await authService.handleForgotPassword({
+    const {status, statusCode, message, data} = await authService.handleForgotPassword({
         email
     });
 
-    res.status(status_code).send({
+    res.status(statusCode).send({
         status : status,
         message: message,
         data : data,
@@ -102,12 +102,12 @@ const handleResetPassword = async (req, res) => {
 
     const { token, password } = req.body;
 
-    const {status, status_code, message, data} = await authService.handleResetPassword({
+    const {status, statusCode, message, data} = await authService.handleResetPassword({
         token,
         password,
     });
 
-    res.status(status_code).send({
+    res.status(statusCode).send({
         status : status,
         message: message,
         data : data,
