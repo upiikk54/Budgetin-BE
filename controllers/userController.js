@@ -79,39 +79,9 @@ const updateUserById = async (req, res, next) => {
 
 // ------------------------- End Update User By Id ------------------------- //
 
-// ------------------------- Reset Password By Id ------------------------- //
-
-const resetPasswordById = async (req, res, next) => {
-    const {
-        id
-    } = req.params;
-    const {
-        password
-    } = req.body;
-    
-
-    const {
-        status,
-        statusCode,
-        message,
-        data
-    } = await userService.resetPasswordById({
-        id,
-        password,
-    });
-
-    res.status(statusCode).send({
-        status: status,
-        message: message,
-        data: data,
-    });
-};
-
-// ------------------------- End Reset Password By Id ------------------------- //
 
 module.exports = {
     getAllUsers,
     getUserById,
-    updateUserById,
-    resetPasswordById,
+    updateUserById
 };
