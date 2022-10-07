@@ -1,4 +1,5 @@
 const authService = require("../services/authService");
+const { getNewOTP } = require("../helper/otpGenerator");
 
 // ------------------------- Auth Register ------------------------- //
 
@@ -82,7 +83,8 @@ const handleForgotPassword = async (req, res) => {
     const {email} = req.body;
 
     const {status, statusCode, message, data} = await authService.handleForgotPassword({
-        email
+        email,
+        otp: getNewOTP()
     });
 
     res.status(statusCode).send({

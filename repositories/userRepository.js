@@ -111,10 +111,10 @@ class userRepository {
 
     // ------------------------- Update User Token  ------------------------- //
 
-    static async handleUpdateUserToken({ email, token }){
+    static async handleUpdateUserToken({ email, otp }){
 
         const updateToken = await users.update({
-            resetPasswordToken: token
+            otp
         }, {
             where: { email }
         });
