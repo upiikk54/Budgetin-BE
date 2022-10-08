@@ -327,17 +327,52 @@ class authService {
                 html:
                     `  
                         <body>
-                            <section>
-                                
-                                <div class="content">
-                                    
-                                    <h2> Halo ${getUser.email}, </h2>
-                                    
-                                    <p>Untuk mengkonfirmasi permintaan reset password akun BudgetIn kamu, silakan salin OTP di bawah ini.</p>
-                    
-                                    <p class="otp">${otp}</p>
+                            <section style="padding: 4% 8%;">
 
-                                    <p> Jika kamu tidak meminta reset password, silakan abaikan email ini.</p>
+                                <img 
+                                    src="https://res.cloudinary.com/dbplhgttm/image/upload/v1665215116/budget-in-logos_ogz2xw.png" 
+                                    alt="logo-budgetin"
+                                />
+                                
+                                <div class="content"
+                                    style="
+                                    margin: 2% 0 0;
+                                    padding:2%; 
+                                    justify-content: center;
+                                    background-color: #EEF2E6;
+                                    border: 2px solid #5F7161;"
+                                >
+                                    
+                                    <h2 
+                                        style="
+                                        color: #000; 
+                                        text-decoration: none; 
+                                        list-style: none"
+                                    > Halo ${getUser.email}, </h2>
+                                    
+                                    <p style="text-align: center; font-size: 16px; color: #000; margin-top: 16px;">
+                                        Untuk mengkonfirmasi permintaan reset password akun BudgetIn kamu, silakan salin OTP di bawah ini.
+                                    </p>
+                    
+                                    <p  class="otp"
+                                        style="
+                                        text-align: center; 
+                                        font-size: 20px;
+                                        padding: 2%;
+                                        background-color: #38a3a5;
+                                        color: #fff;
+                                        font-weight: 700;
+                                        width: 30%;
+                                        display: block;
+                                        margin: 0 auto;
+                                        border-radius: 5px;"
+                                    >
+                                        ${otp}
+                                    </p>
+
+                                    <p  style="text-align: center; font-size: 16px; color: #000;"> 
+                                        Jika kamu tidak meminta reset password, silakan abaikan email ini.
+                                    </p>
                                 </div>
                             </section>    
                         </body>
