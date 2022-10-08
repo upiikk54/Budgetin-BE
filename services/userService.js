@@ -3,8 +3,8 @@ const cloudinary = require("../utils/cloudinary");
 const SALT_ROUND = 10;
 const bcrypt = require("bcrypt");
 const spacing = /[\s]/;
-const upperCaseLetters  = /[A-Z]/g;
-const numbers  = /[0-9]/g;
+const upperCaseLetters = /[A-Z]/g;
+const numbers = /[0-9]/g;
 
 class userService {
 
@@ -22,7 +22,7 @@ class userService {
                 getAllData: getAllUsers,
             },
         };
-        
+
     };
 
     // ------------------------- End Get All Users ------------------------- //
@@ -52,7 +52,7 @@ class userService {
 
 
     // ------------------------- Update User By Id ------------------------- //
-    
+
     static async updateUserById({
         id,
         tanggal_lahir,
@@ -110,7 +110,7 @@ class userService {
 
 
     // ------------------------- Reset Password By Id ------------------------- //
-    
+
     static async resetPasswordById({
         id,
         password,
@@ -200,6 +200,52 @@ class userService {
     };
 
     // ------------------------- End Reset Password By Id ------------------------- //
+
+    static async getTransactionIncomeByUserId({
+        id,
+        descriptionIncome,
+        priceIncome,
+        dateIncome,
+    }) {
+        const getTransactionIncomeByUserId = await userRepository.getTransactionIncomeByUserId({
+            id,
+            descriptionIncome,
+            priceIncome,
+            dateIncome,
+        });
+
+        return {
+            status: true,
+            statusCode: 200,
+            message: "Your Product Success to get",
+            data: {
+                getTransactionIncomeByUserId: getTransactionIncomeByUserId,
+            },
+        };
+    }
+
+    static async getTransactionOutcomeByUserId({
+        id,
+        descriptionOutcome,
+        priceOutcome,
+        dateOutcome,
+    }) {
+        const getTransactionOutcomeByUserId = await userRepository.getTransactionOutcomeByUserId({
+            id,
+            descriptionOutcome,
+            priceOutcome,
+            dateOutcome,
+        });
+
+        return {
+            status: true,
+            statusCode: 200,
+            message: "Your Product Success to get",
+            data: {
+                getTransactionOutcomeByUserId: getTransactionOutcomeByUserId,
+            },
+        };
+    }
 };
 
 module.exports = userService;

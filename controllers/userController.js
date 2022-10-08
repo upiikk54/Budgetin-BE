@@ -109,9 +109,72 @@ const resetPasswordById = async (req, res, next) => {
 
 // ------------------------- End Reset Password By Id ------------------------- //
 
+
+const getTransactionIncomeByUserId = async (req, res, next) => {
+    const {
+        id
+    } = req.params;
+    const {
+        descriptionIncome,
+        priceIncome,
+        dateIncome,
+    } = req.query;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } =
+    await userService.getTransactionIncomeByUserId({
+        id,
+        descriptionIncome,
+        priceIncome,
+        dateIncome,
+    });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+};
+
+const getTransactionOutcomeByUserId = async (req, res, next) => {
+    const {
+        id
+    } = req.params;
+    const {
+        descriptionOutcome,
+        priceOutcome,
+        dateOutcome,
+    } = req.query;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } =
+    await userService.getTransactionOutcomeByUserId({
+        id,
+        descriptionOutcome,
+        priceOutcome,
+        dateOutcome,
+    });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+};
+
 module.exports = {
     getAllUsers,
     getUserById,
     updateUserById,
     resetPasswordById,
+    getTransactionIncomeByUserId,
+    getTransactionOutcomeByUserId
 };

@@ -1,4 +1,6 @@
 const {
+    transactionIncome,
+    transactionOutcome,
     users
 } = require("../models");
 
@@ -127,6 +129,68 @@ class userRepository {
     }
 
     // ------------------------- End Update User By Id ------------------------- //
+
+    static async getTransactionIncomeByUserId({
+        id,
+        descriptionIncome,
+        priceIncome,
+        dateIncome,
+    }) {
+        const query = {
+            where: {}
+        }
+
+        if (id) {
+            query.where = { ...query.where, user_id: id }
+        }
+
+        if (descriptionIncome) {
+            query.where = { ...query.where, descriptionIncome }
+        }
+
+        if (priceIncome) {
+            query.where = { ...query.where, priceIncome }
+        }
+
+        if (dateIncome) {
+            query.where = { ...query.where, dateIncome }
+        }
+
+        const getTransactionIncomeByUserId = await transactionIncome.findAll(query);
+
+        return getTransactionIncomeByUserId;
+    }
+
+    static async getTransactionOutcomeByUserId({
+        id,
+        descriptionOutcome,
+        priceOutcome,
+        dateOutcome,
+    }) {
+        const query = {
+            where: {}
+        }
+
+        if (id) {
+            query.where = { ...query.where, user_id: id }
+        }
+
+        if (descriptionOutcome) {
+            query.where = { ...query.where, descriptionOutcome }
+        }
+
+        if (priceOutcome) {
+            query.where = { ...query.where, priceOutcome }
+        }
+
+        if (dateOutcome) {
+            query.where = { ...query.where, dateOutcome }
+        }
+
+        const getTransactionOutcomeByUserId = await transactionOutcome.findAll(query);
+
+        return getTransactionOutcomeByUserId;
+    }
 }
 
 module.exports = userRepository;

@@ -17,6 +17,7 @@ app.use(cors());
 
 const authController = require("./controllers/authController");
 const userController = require("./controllers/userController");
+const transaction = require("./controllers/transactionController")
 
 // ------------------- End Import Controller ------------------- //
 
@@ -47,6 +48,24 @@ app.put("/api/resetpassword/:id", userController.resetPasswordById);
 
 // ------------------- Define Routes Users ------------------- //
 
+
+// ------------------- Define Routes Transaction Income ------------------- //
+
+app.post("/api/transaction/create", middlewares.authenticate, transaction.createTransactionIncome);
+app.put("/api/transaction/update/:id", middlewares.authenticate, transaction.updateTransactionIncomeById);
+app.get("/api/transaction/getAllData", transaction.getAllTransactionIncome);
+app.get("/users/:id/transaction", middlewares.authenticate, userController.getTransactionIncomeByUserId);
+app.delete("/api/transaction/delete/:id", middlewares.authenticate, transaction.deleteTransactionIncomeByUserId);
+
+// ------------------- Define Routes Transaction Income ------------------- //
+
+// ------------------- Define Routes Transaction Outcome ------------------- //
+
+app.post("/api/transactionOutcome/create", middlewares.authenticate, transaction.createTransactionOutcome);
+app.put("/api/transactionOutcome/update/:id", middlewares.authenticate, transaction.updateTransactionOutcomeById);
+app.get("/api/transactionOutcome/getAllData", transaction.getAllTransactionOutcome);
+app.get("/users/:id/transactionOutcome", middlewares.authenticate, userController.getTransactionOutcomeByUserId);
+app.delete("/api/transactionOutcome/delete/:id", middlewares.authenticate, transaction.deleteTransactionOutcomeByUserId);
 
 // ------------------- Listen Server ------------------- //
 
