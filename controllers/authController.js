@@ -102,10 +102,10 @@ const handleForgotPassword = async (req, res) => {
 
 const handleResetPassword = async (req, res) => {
 
-    const { token, password } = req.body;
+    const { otp, password } = req.body;
 
     const {status, statusCode, message, data} = await authService.handleResetPassword({
-        token,
+        otp,
         password,
     });
 

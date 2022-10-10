@@ -400,7 +400,7 @@ class authService {
 
     // ------------------------- Reset Password ------------------------- //
 
-    static async handleResetPassword({ token, password }) {
+    static async handleResetPassword({ otp, password }) {
 
         // ------------------------- Payload Validation ------------------------- //
         const passwordUppercase = password.match(upperCaseLetters);
@@ -454,17 +454,17 @@ class authService {
             };
         }
 
-        const getUserData = await userRepository.handleGetUserToken({
-            token,
+        const getUserData = await userRepository.handleGetUserOTP({
+            otp,
             password
         });
 
-        if (getUserData.resetPasswordToken == token) {
+        if (getUserData.otp == otp) {
 
             const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
 
             const updateUserPassword = await userRepository.handleUpdateUserPassword({
-                token,
+                otp,
                 password: hashedPassword
             });
 

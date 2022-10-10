@@ -126,11 +126,11 @@ class userRepository {
 
     // ------------------------- Get User Token  ------------------------- //
 
-    static async handleGetUserToken({ token, password }){
+    static async handleGetUserOTP({ otp, password }){
 
         const getUserData = await users.findOne({
             where: {
-                resetPasswordToken: token
+                otp
             }
         });
 
@@ -142,13 +142,14 @@ class userRepository {
 
     // ------------------------- Update User Password  ------------------------- //
     
-    static async handleUpdateUserPassword({ token, password }){
+    static async handleUpdateUserPassword({ otp, password }){
 
         const updateUserPassword = await users.update({
+            otp: null,
             password
 
         }, {
-            where: { resetPasswordToken: token }
+            where: { otp }
         });
 
         return updateUserPassword;
