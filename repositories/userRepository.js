@@ -1,7 +1,9 @@
+const sequelize = require("sequelize");
 const {
     transactionIncome,
     transactionOutcome,
-    users
+    users,
+    targets
 } = require("../models");
 
 class userRepository {
@@ -16,7 +18,7 @@ class userRepository {
 
     // ------------------------- End Get All Users ------------------------- //
 
-    
+
     // ------------------------- Get User By Id ------------------------- //
 
     static async getUserById({
@@ -91,13 +93,13 @@ class userRepository {
 
     static async updateUserById({
         id,
-        tanggal_lahir,
-        jenis_kelamin,
+        dateOfBirth,
+        gender,
         image
     }) {
         const updateUserById = await users.update({
-            tanggal_lahir,
-            jenis_kelamin,
+            dateOfBirth,
+            gender,
             image
         }, {
             where: {
@@ -141,19 +143,31 @@ class userRepository {
         }
 
         if (id) {
-            query.where = { ...query.where, user_id: id }
+            query.where = {
+                ...query.where,
+                user_id: id
+            }
         }
 
         if (descriptionIncome) {
-            query.where = { ...query.where, descriptionIncome }
+            query.where = {
+                ...query.where,
+                descriptionIncome
+            }
         }
 
         if (priceIncome) {
-            query.where = { ...query.where, priceIncome }
+            query.where = {
+                ...query.where,
+                priceIncome
+            }
         }
 
         if (dateIncome) {
-            query.where = { ...query.where, dateIncome }
+            query.where = {
+                ...query.where,
+                dateIncome
+            }
         }
 
         const getTransactionIncomeByUserId = await transactionIncome.findAll(query);
@@ -172,24 +186,87 @@ class userRepository {
         }
 
         if (id) {
-            query.where = { ...query.where, user_id: id }
+            query.where = {
+                ...query.where,
+                user_id: id
+            }
         }
 
         if (descriptionOutcome) {
-            query.where = { ...query.where, descriptionOutcome }
+            query.where = {
+                ...query.where,
+                descriptionOutcome
+            }
         }
 
         if (priceOutcome) {
-            query.where = { ...query.where, priceOutcome }
+            query.where = {
+                ...query.where,
+                priceOutcome
+            }
         }
 
         if (dateOutcome) {
-            query.where = { ...query.where, dateOutcome }
+            query.where = {
+                ...query.where,
+                dateOutcome
+            }
         }
 
         const getTransactionOutcomeByUserId = await transactionOutcome.findAll(query);
 
         return getTransactionOutcomeByUserId;
+    }
+
+    static async getTargetByUserId({
+        id,
+        nameTarget,
+        nominalTarget,
+        dateTarget,
+        image
+    }) {
+        const query = {
+            where: {}
+        }
+
+        if (id) {
+            query.where = {
+                ...query.where,
+                user_id: id
+            }
+        }
+
+        if (nameTarget) {
+            query.where = {
+                ...query.where,
+                nameTarget
+            }
+        }
+
+        if (nominalTarget) {
+            query.where = {
+                ...query.where,
+                nominalTarget
+            }
+        }
+
+        if (dateTarget) {
+            query.where = {
+                ...query.where,
+                dateTarget
+            }
+        }
+
+        if (image) {
+            query.where = {
+                ...query.where,
+                image
+            }
+        }
+
+        const getTargetByUserId = await targets.findAll(query);
+
+        return getTargetByUserId;
     }
 }
 

@@ -1,3 +1,4 @@
+const sequelize = require("sequelize");
 const {
     transactionIncome,
     transactionOutcome,

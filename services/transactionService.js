@@ -84,24 +84,24 @@ class transactionService {
 
         if (getTransactionIncomeById.user_id == user_id) {
 
-            if(!priceIncome){
+            if (!priceIncome) {
                 priceIncome = getTransactionIncomeById.priceIncome
             }
 
-            if(!categoryIncome){
+            if (!categoryIncome) {
                 categoryIncome = getTransactionIncomeById.categoryIncome
             }
 
-            if(!categoryIncome){
+            if (!categoryIncome) {
                 categoryIncome = getTransactionIncomeById.categoryIncome
             }
 
-            if(!dateIncome){
+            if (!dateIncome) {
                 dateIncome = getTransactionIncomeById.dateIncome
             }
 
-            if(!descriptionIncome){
-                descriptionIncome = getProduct.descriptionIncome
+            if (!descriptionIncome) {
+                descriptionIncome = getTransactionIncomeById.descriptionIncome
             }
 
             const updateTransactionIncomeById = await transactionRepository.updateTransactionIncomeById({
@@ -264,23 +264,23 @@ class transactionService {
 
         if (getTransactionOutcomeById.user_id == user_id) {
 
-            if(!priceOutcome){
+            if (!priceOutcome) {
                 priceOutcome = getTransactionOutcomeById.priceOutcome
             }
 
-            if(!categoryOutcome){
+            if (!categoryOutcome) {
                 categoryOutcome = getTransactionOutcomeById.categoryOutcome
             }
 
-            if(!categoryOutcome){
+            if (!categoryOutcome) {
                 categoryOutcome = getTransactionOutcomeById.categoryOutcome
             }
 
-            if(!dateOutcome){
+            if (!dateOutcome) {
                 dateOutcome = getTransactionOutcomeById.dateOutcome
             }
 
-            if(!descriptionOutcome){
+            if (!descriptionOutcome) {
                 descriptionOutcome = getProduct.descriptionOutcome
             }
 

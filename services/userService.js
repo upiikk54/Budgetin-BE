@@ -55,8 +55,8 @@ class userService {
 
     static async updateUserById({
         id,
-        tanggal_lahir,
-        jenis_kelamin,
+        dateOfBirth,
+        gender,
         image
     }) {
 
@@ -80,8 +80,8 @@ class userService {
 
             const updatedUser = await userRepository.updateUserById({
                 id,
-                tanggal_lahir,
-                jenis_kelamin,
+                dateOfBirth,
+                gender,
                 image: images
             });
 
@@ -243,6 +243,31 @@ class userService {
             message: "Your Product Success to get",
             data: {
                 getTransactionOutcomeByUserId: getTransactionOutcomeByUserId,
+            },
+        };
+    }
+
+    static async getTargetByUserId({
+        id,
+        nameTarget,
+        nominalTarget,
+        dateTarget,
+        image
+    }) {
+        const getTargetByUserId = await userRepository.getTargetByUserId({
+            id,
+            nameTarget,
+            nominalTarget,
+            dateTarget,
+            image
+        });
+
+        return {
+            status: true,
+            statusCode: 200,
+            message: "Berhasil menampilkan tujuan",
+            data: {
+                getTargetByUserId: getTargetByUserId,
             },
         };
     }

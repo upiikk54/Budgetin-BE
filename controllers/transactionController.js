@@ -63,7 +63,7 @@ const updateTransactionIncomeById = async (req, res, next) => {
     } = req.body;
 
     const user_id = req.user.id;
-    
+
 
     const {
         status,
@@ -168,7 +168,7 @@ const updateTransactionOutcomeById = async (req, res, next) => {
     } = req.body;
 
     const user_id = req.user.id;
-    
+
 
     const {
         status,

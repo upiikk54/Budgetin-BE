@@ -53,8 +53,8 @@ const updateUserById = async (req, res, next) => {
         id
     } = req.params;
     const {
-        tanggal_lahir,
-        jenis_kelamin,
+        dateOfBirth,
+        gender,
     } = req.body;
     
 
@@ -65,8 +65,8 @@ const updateUserById = async (req, res, next) => {
         data
     } = await userService.updateUserById({
         id,
-        tanggal_lahir,
-        jenis_kelamin,
+        dateOfBirth,
+        gender,
         image: req.file,
     });
 
@@ -170,11 +170,44 @@ const getTransactionOutcomeByUserId = async (req, res, next) => {
     });
 };
 
+const getTargetByUserId = async (req, res, next) => {
+    const {
+        id
+    } = req.params;
+    const {
+        nameTarget,
+        nominalTarget,
+        dateTarget,
+        image
+    } = req.query;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } =
+    await userService.getTargetByUserId({
+        id,
+        nameTarget,
+        nominalTarget,
+        dateTarget,
+        image
+    });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+};
+
 module.exports = {
     getAllUsers,
     getUserById,
     updateUserById,
     resetPasswordById,
     getTransactionIncomeByUserId,
-    getTransactionOutcomeByUserId
+    getTransactionOutcomeByUserId,
+    getTargetByUserId,
 };

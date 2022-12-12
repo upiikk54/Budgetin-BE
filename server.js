@@ -17,7 +17,9 @@ app.use(cors());
 
 const authController = require("./controllers/authController");
 const userController = require("./controllers/userController");
-const transaction = require("./controllers/transactionController")
+const transactionController = require("./controllers/transactionController")
+const targetController = require("./controllers/targetsController")
+const transactionTargetController = require("./controllers/transactionTargetController")
 
 // ------------------- End Import Controller ------------------- //
 
@@ -51,21 +53,44 @@ app.put("/api/resetpassword/:id", userController.resetPasswordById);
 
 // ------------------- Define Routes Transaction Income ------------------- //
 
-app.post("/api/transaction/create", middlewares.authenticate, transaction.createTransactionIncome);
-app.put("/api/transaction/update/:id", middlewares.authenticate, transaction.updateTransactionIncomeById);
-app.get("/api/transaction/getAllData", transaction.getAllTransactionIncome);
+app.post("/api/transaction/create", middlewares.authenticate, transactionController.createTransactionIncome);
+app.put("/api/transaction/update/:id", middlewares.authenticate, transactionController.updateTransactionIncomeById);
+app.get("/api/transaction/getAllData", transactionController.getAllTransactionIncome);
 app.get("/users/:id/transaction", middlewares.authenticate, userController.getTransactionIncomeByUserId);
-app.delete("/api/transaction/delete/:id", middlewares.authenticate, transaction.deleteTransactionIncomeByUserId);
+app.delete("/api/transaction/delete/:id", middlewares.authenticate, transactionController.deleteTransactionIncomeByUserId);
 
 // ------------------- Define Routes Transaction Income ------------------- //
 
 // ------------------- Define Routes Transaction Outcome ------------------- //
 
-app.post("/api/transactionOutcome/create", middlewares.authenticate, transaction.createTransactionOutcome);
-app.put("/api/transactionOutcome/update/:id", middlewares.authenticate, transaction.updateTransactionOutcomeById);
-app.get("/api/transactionOutcome/getAllData", transaction.getAllTransactionOutcome);
+app.post("/api/transactionOutcome/create", middlewares.authenticate, transactionController.createTransactionOutcome);
+app.put("/api/transactionOutcome/update/:id", middlewares.authenticate, transactionController.updateTransactionOutcomeById);
+app.get("/api/transactionOutcome/getAllData", transactionController.getAllTransactionOutcome);
 app.get("/users/:id/transactionOutcome", middlewares.authenticate, userController.getTransactionOutcomeByUserId);
-app.delete("/api/transactionOutcome/delete/:id", middlewares.authenticate, transaction.deleteTransactionOutcomeByUserId);
+app.delete("/api/transactionOutcome/delete/:id", middlewares.authenticate, transactionController.deleteTransactionOutcomeByUserId);
+
+// ------------------- Define Routes Transaction Outcome ------------------- //
+
+// ------------------- Define Routes Transaction Targets ------------------- //
+
+app.post("/api/targets/create", middlewares.authenticate, upload.single("image"), targetController.createTarget);
+app.put("/api/targets/update/:id", middlewares.authenticate, upload.single("image"), targetController.updateTarget);
+app.get("/users/:id/targets", middlewares.authenticate, userController.getTargetByUserId);
+app.get("/api/target/:id", middlewares.authenticate, targetController.getTargetById);
+app.delete("/api/target/delete/:id", middlewares.authenticate, targetController.deleteTarget);
+
+// ------------------- Define Routes Transaction Targets ------------------- //
+
+// ------------------- Define Routes Transaction TransactionTarget ------------------- //
+
+app.post("/api/transactionTarget/create", middlewares.authenticate, transactionTargetController.createTransactionTarget);
+app.put("/api/transactionTarget/update/:id", middlewares.authenticate, transactionTargetController.updateTransactionTarget);
+app.get("/api/transactionTarget/:id", middlewares.authenticate, transactionTargetController.getTransactionByTargetsId);
+
+// ------------------- Define Routes Transaction TransactionTarget ------------------- //
+
+
+
 
 // ------------------- Listen Server ------------------- //
 
