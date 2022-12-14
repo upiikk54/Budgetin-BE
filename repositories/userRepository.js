@@ -68,15 +68,17 @@ class userRepository {
 
     // ------------------------- Register ------------------------- //
 
-    static async register({
+    static async handleRegister({
         userName,
         email,
-        password
+        password,
+        isAgree
     }) {
         const registeredUser = users.create({
             userName,
             email,
-            password
+            password,
+            isAgree
         });
 
         return registeredUser;
@@ -113,13 +115,13 @@ class userRepository {
 
     static async handleUpdateUserToken({ email, otp }){
 
-        const updateToken = await users.update({
+        const updatedToken = await users.update({
             otp
         }, {
             where: { email }
         });
 
-        return updateToken;
+        return updatedToken;
     };
 
     // ------------------------- End Update User Token  ------------------------- //
@@ -142,7 +144,7 @@ class userRepository {
 
     // ------------------------- Update User Password  ------------------------- //
     
-    static async handleUpdateUserPassword({ otp, password }){
+    static async handleResetPassword({ otp, password }){
 
         const updateUserPassword = await users.update({
             otp: null,

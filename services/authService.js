@@ -1,26 +1,25 @@
 const userRepository = require("../repositories/userRepository");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {
-    JWT
-} = require("../lib/const");
+const { JWT } = require("../lib/const");
+const { passwordResetEmail } = require("../helper/nodemailer");
+const { OAuth2Client } = require("google-auth-library");
+
 const SALT_ROUND = 10;
 const upperCaseLetters = /[A-Z]/g;
 const numbers = /[0-9]/g;
 const addEmail = /[@]/g;
 const dotEmail = /[.]/g;
 const spacing = /[\s]/;
-
-const { passwordResetEmail } = require("../helper/nodemailer");
-
 class authService {
 
     // ------------------------- Register ------------------------- //
 
-    static async register({
+    static async handleRegister({
         userName,
         email,
         password,
+        isAgree
     }) {
 
         // ------------------------- Payload Validation ------------------------- //
@@ -126,6 +125,17 @@ class authService {
             };
         }
 
+        if (!isAgree) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Personal data statement is required",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        }
+
         const getUserByEmail = await userRepository.getUsersByEmail({
             email
         });
@@ -141,10 +151,11 @@ class authService {
             };
         } else {
             const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
-            const createdUser = await userRepository.register({
+            const createdUser = await userRepository.handleRegister({
                 userName,
                 email,
                 password: hashedPassword,
+                isAgree
             });
 
             return {
@@ -163,7 +174,7 @@ class authService {
 
     // ------------------------- Login ------------------------- //
 
-    static async login({
+    static async handleLogin({
         userName,
         password,
     }) {
@@ -300,7 +311,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Email wajib diisi",
+                message: "Email is required",
                 data: {
                     forgot_password: null,
                 },
@@ -313,7 +324,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 404,
-                message: "Email belum terdaftar",
+                message: "Email not registered",
                 data: {
                     user: null,
                 },
@@ -326,23 +337,28 @@ class authService {
                 subject: 'Konfirmasi Reset Password Akun BudgetIn Kamu',
                 html:
                     `  
-                        <body>
+                        <body 
+                        style="
+                            background-color: #F1F6F5;
+                        "
+                        >
                             <section style="padding: 4% 8%;">
-
-                                <img 
-                                    src="https://res.cloudinary.com/dbplhgttm/image/upload/v1665215116/budget-in-logos_ogz2xw.png" 
-                                    alt="logo-budgetin"
-                                />
                                 
                                 <div class="content"
                                     style="
                                     margin: 2% 0 0;
                                     padding:2%; 
                                     justify-content: center;
-                                    background-color: #EEF2E6;
-                                    border: 2px solid #5F7161;"
+                                    background-color: #FFFFFF;
+                                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                                    height: auto;"
                                 >
-                                    
+                                
+                                    <img 
+                                        src="https://res.cloudinary.com/dbplhgttm/image/upload/v1670903425/Budgetin-logo_x8ecet.png" 
+                                        alt="logo-budgetin"
+                                    />
+
                                     <h2 
                                         style="
                                         color: #000; 
@@ -359,8 +375,8 @@ class authService {
                                         text-align: center; 
                                         font-size: 20px;
                                         padding: 2%;
-                                        background-color: #38a3a5;
-                                        color: #fff;
+                                        background-color: #000;
+                                        color: #FFF;
                                         font-weight: 700;
                                         width: 30%;
                                         display: block;
@@ -381,14 +397,14 @@ class authService {
 
             passwordResetEmail(emailTemplates);
 
-            const updateToken = await userRepository.handleUpdateUserToken({ email, otp });
+            const updatedToken = await userRepository.handleUpdateUserToken({ email, otp });
 
             return {
                 status: true,
                 statusCode: 201,
-                message: "Reset password terkirim ke email user!",
+                message: "Password reset sent to user email",
                 data: {
-                    updateToken
+                    updatedToken
                 }
             };
         }
@@ -463,7 +479,7 @@ class authService {
 
             const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
 
-            const updateUserPassword = await userRepository.handleUpdateUserPassword({
+            const updateUserPassword = await userRepository.handleResetPassword({
                 otp,
                 password: hashedPassword
             });
@@ -471,7 +487,7 @@ class authService {
             return {
                 status: true,
                 statusCode: 201,
-                message: "User berhasil ganti password",
+                message: "User has successfully changed the password",
                 data: {
                     updateUserPassword,
                 },
@@ -489,6 +505,66 @@ class authService {
     };
 
     // ------------------------- End Reset Password ------------------------- //
+
+
+    // ------------------------- Auth Login With Google ------------------------- //
+
+    static async handleLoginWithGoogle({ google_credential: googleCredential }) {
+
+        try {
+
+            const client = new OAuth2Client(
+                "811794821530-3gp096cooqtmdjmn3d7qg6l2l50rjpq6.apps.googleusercontent.com"
+            );
+
+            const userInfo = await client.verifyIdToken({
+                idToken: googleCredential,
+                audience:
+                    "811794821530-3gp096cooqtmdjmn3d7qg6l2l50rjpq6.apps.googleusercontent.com",
+            });
+
+            const { email, userName } = userInfo.payload;
+
+            const getUserByEmail = await userRepository.getUsersByEmail({ email: email });
+
+            if (!getUserByEmail) {
+
+                const createdUser = await userRepository.handleRegister({ userName, email });
+
+                const token = jwt.sign({
+                    id: createdUser.id,
+                    email: createdUser.email,
+                },
+                    JWT.SECRET,
+                    {
+                        expiresIn: JWT.EXPIRED,
+                    });
+
+                return {
+                    status: true,
+                    status_code: 201,
+                    message: "Successfully registered user!",
+                    data: {
+                        token,
+                        loginGoogle: createdUser,
+                    }
+                };
+            }
+
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Resource Unauthorized",
+                data: {
+                    loginGoolge: null,
+                },
+            };
+        }
+
+    };
+
+    // ------------------------- End Auth Login With Google ------------------------- //
 
 };
 

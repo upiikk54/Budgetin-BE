@@ -1,13 +1,14 @@
 const authService = require("../services/authService");
-const { getNewOTP } = require("../helper/otpGenerator");
+const { generatedOTP } = require("../helper/otpGenerator");
 
 // ------------------------- Auth Register ------------------------- //
 
-const register = async (req, res) => {
+const handleRegister = async (req, res) => {
     const {
         userName,
         email,
-        password
+        password,
+        isAgree
     } = req.body;
 
     const {
@@ -15,10 +16,11 @@ const register = async (req, res) => {
         statusCode,
         message,
         data
-    } = await authService.register({
+    } = await authService.handleRegister({
         userName,
         email,
-        password
+        password,
+        isAgree
     });
 
     res.status(statusCode).send({
@@ -33,7 +35,7 @@ const register = async (req, res) => {
 
 // ------------------------- Auth Login ------------------------- //
 
-const login = async (req, res) => {
+const handleLogin = async (req, res) => {
     const {
         userName,
         password
@@ -44,7 +46,7 @@ const login = async (req, res) => {
         statusCode,
         message,
         data
-    } = await authService.login({
+    } = await authService.handleLogin({
         userName,
         password
     });
@@ -80,11 +82,11 @@ const currentUser = async (req, res) => {
 
 const handleForgotPassword = async (req, res) => {
 
-    const {email} = req.body;
+    const { email } = req.body;
 
     const {status, statusCode, message, data} = await authService.handleForgotPassword({
         email,
-        otp: getNewOTP()
+        otp: generatedOTP()
     });
 
     res.status(statusCode).send({
@@ -95,10 +97,10 @@ const handleForgotPassword = async (req, res) => {
 
 }
 
-// ------------------------- End Forgot Password ------------------------- //
+// ------------------------- End Auth Forgot Password ------------------------- //
 
 
-// ------------------------- Reset Password ------------------------- //
+// ------------------------- Auth Reset Password ------------------------- //
 
 const handleResetPassword = async (req, res) => {
 
@@ -117,12 +119,34 @@ const handleResetPassword = async (req, res) => {
 
 };
 
-// ------------------------- End Reset Password ------------------------- //
+// ------------------------- End Auth Reset Password ------------------------- //
+
+
+// ------------------------- Auth Login With Google ------------------------- //
+
+const handleLoginWithGoogle = async(req, res) => {
+
+    const { google_credential } = req.body;
+
+    const { status, statusCode, message, data } = await authService.handleLoginWithGoogle({
+        google_credential
+    });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+
+};
+
+// ------------------------- End Auth Login With Google ------------------------- //
 
 module.exports = {
-    register,
-    login,
+    handleRegister,
+    handleLogin,
     currentUser,
     handleForgotPassword,
-    handleResetPassword
+    handleResetPassword,
+    handleLoginWithGoogle
 };
