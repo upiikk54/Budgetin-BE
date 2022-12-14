@@ -17,9 +17,6 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      otp: {
-        type: Sequelize.STRING
-      },
       dateOfBirth: {
         type: Sequelize.DATEONLY
       },
@@ -28,6 +25,12 @@ module.exports = {
       },
       image: {
         type: Sequelize.TEXT
+      },
+      otp: {
+        type: Sequelize.STRING
+      },
+      isAgree: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
