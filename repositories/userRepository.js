@@ -72,19 +72,21 @@ class userRepository {
 
     // ------------------------- Register ------------------------- //
 
-    static async register({
+    static async handleRegister({
         userName,
         email,
-        password
+        password,
+        isAgree
     }) {
         const registeredUser = users.create({
             userName,
             email,
-            password
+            password,
+            isAgree
         });
 
         return registeredUser;
-    }
+    };
 
     // ------------------------- End Register ------------------------- //
 
@@ -108,27 +110,58 @@ class userRepository {
         });
 
         return updateUserById;
-    }
+    };
 
     // ------------------------- End Update User By Id ------------------------- //
 
 
-    // ------------------------- Update User By Id ------------------------- //
+    // ------------------------- Update User Token  ------------------------- //
 
-    static async resetPasswordById({
-        id,
-        password
-    }) {
-        const resetPasswordById = await users.update({
-            password
+    static async handleUpdateUserToken({ email, otp }){
+
+        const updatedToken = await users.update({
+            otp
         }, {
+            where: { email }
+        });
+
+        return updatedToken;
+    };
+
+    // ------------------------- End Update User Token  ------------------------- //
+
+    // ------------------------- Get User Token  ------------------------- //
+
+    static async handleGetUserOTP({ otp, password }){
+
+        const getUserData = await users.findOne({
             where: {
-                id
+                otp
             }
         });
 
-        return resetPasswordById;
+        return getUserData;
     }
+
+    // ------------------------- End Get User Token  ------------------------- //
+
+
+    // ------------------------- Update User Password  ------------------------- //
+    
+    static async handleResetPassword({ otp, password }){
+
+        const updateUserPassword = await users.update({
+            otp: null,
+            password
+
+        }, {
+            where: { otp }
+        });
+
+        return updateUserPassword;
+    }
+    
+    // ------------------------- End Update User Password  ------------------------- //
 
     // ------------------------- End Update User By Id ------------------------- //
 

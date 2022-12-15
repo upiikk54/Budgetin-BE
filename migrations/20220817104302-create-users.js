@@ -18,13 +18,19 @@ module.exports = {
         type: Sequelize.STRING
       },
       dateOfBirth: {
-        type: Sequelize.STRING
+        type: Sequelize.DATEONLY
       },
       gender: {
         type: Sequelize.STRING
       },
       image: {
+        type: Sequelize.TEXT
+      },
+      otp: {
         type: Sequelize.STRING
+      },
+      isAgree: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

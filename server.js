@@ -33,12 +33,20 @@ const middlewares = require("./middlewares/auth");
 
 // ------------------- Define Routes Auth ------------------- //
 
-app.post("/auth/register", authController.register);
-app.post("/auth/login", authController.login);
+app.post("/auth/register", authController.handleRegister);
+app.post("/auth/login", authController.handleLogin);
 app.get("/auth/me",middlewares.authenticate, authController.currentUser);
 app.put("/auth/forgotpassword", authController.handleForgotPassword);
+app.put("/auth/resetpassword", authController.handleResetPassword);
 
 // ------------------- End Define Routes Auth ------------------- //
+
+
+// ------------------- Define Google Oauth  ------------------- //
+
+app.post("/auth/login-google", authController.handleLoginWithGoogle);
+
+// ------------------- End Define Google Oauth  ------------------- //
 
 
 // ------------------- Define Routes Users ------------------- //
@@ -46,7 +54,6 @@ app.put("/auth/forgotpassword", authController.handleForgotPassword);
 app.get("/api/users", userController.getAllUsers);
 app.get("/api/users/:id", middlewares.authenticate, userController.getUserById);
 app.put("/api/users/:id", middlewares.authenticate, upload.single("image"), userController.updateUserById);
-app.put("/api/resetpassword/:id", userController.resetPasswordById);
 
 // ------------------- Define Routes Users ------------------- //
 

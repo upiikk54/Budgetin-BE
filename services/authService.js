@@ -1,24 +1,25 @@
 const userRepository = require("../repositories/userRepository");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {
-    JWT
-} = require("../lib/const");
-const SALT_ROUND = 10;
-const upperCaseLetters  = /[A-Z]/g;
-const numbers  = /[0-9]/g;
-const addEmail =/[@]/g;
-const dotEmail =/[.]/g;
-const spacing = /[\s]/;
+const { JWT } = require("../lib/const");
+const { passwordResetEmail } = require("../helper/nodemailer");
+const { OAuth2Client } = require("google-auth-library");
 
+const SALT_ROUND = 10;
+const upperCaseLetters = /[A-Z]/g;
+const numbers = /[0-9]/g;
+const addEmail = /[@]/g;
+const dotEmail = /[.]/g;
+const spacing = /[\s]/;
 class authService {
 
     // ------------------------- Register ------------------------- //
 
-    static async register({
+    static async handleRegister({
         userName,
         email,
         password,
+        isAgree
     }) {
 
         // ------------------------- Payload Validation ------------------------- //
@@ -124,6 +125,17 @@ class authService {
             };
         }
 
+        if (!isAgree) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Personal data statement is required",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        }
+
         const getUserByEmail = await userRepository.getUsersByEmail({
             email
         });
@@ -139,10 +151,11 @@ class authService {
             };
         } else {
             const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
-            const createdUser = await userRepository.register({
+            const createdUser = await userRepository.handleRegister({
                 userName,
                 email,
                 password: hashedPassword,
+                isAgree
             });
 
             return {
@@ -161,7 +174,7 @@ class authService {
 
     // ------------------------- Login ------------------------- //
 
-    static async login({
+    static async handleLogin({
         userName,
         password,
     }) {
@@ -256,12 +269,12 @@ class authService {
 
             if (isPasswordMatch) {
                 const token = jwt.sign({
-                        id: getUsersByUsername.id,
-                        email: getUsersByUsername.email
-                    },
+                    id: getUsersByUsername.id,
+                    email: getUsersByUsername.email
+                },
                     JWT.SECRET, {
-                        expiresIn: JWT.EXPIRED,
-                    });
+                    expiresIn: JWT.EXPIRED,
+                });
 
                 return {
                     status: true,
@@ -287,128 +300,272 @@ class authService {
     // ------------------------- End Login ------------------------- //
 
 
-    // ------------------------- Auth Forgot Password ------------------------- //
 
-    static async handleForgotPassword({ email }){
+    // ------------------------- Forgot Password ------------------------- //
+
+    static async handleForgotPassword({ email, otp }) {
 
         // ------------------------- Payload Validation ------------------------- //
-        
-        if(!email){
+
+        if (!email) {
             return {
                 status: false,
-                status_code: 400,
-                message: "Email wajib diisi",
-                data : {
+                statusCode: 400,
+                message: "Email is required",
+                data: {
                     forgot_password: null,
                 },
             };
         }
 
-        const getUser = await userRepository.getUsersByEmail({email: email});
+        const getUser = await userRepository.getUsersByEmail({ email: email });
 
-        if (!getUser){
-            return{
+        if (!getUser) {
+            return {
                 status: false,
-                status_code: 404,
-                message: "Email belum terdaftar",
+                statusCode: 404,
+                message: "Email not registered",
                 data: {
                     user: null,
                 },
             };
         } else {
-            
-            const token = jwt.sign ({
-                id : getUser.id,
-            }, 
-            JWT.SECRET,
-            {
-            expiresIn: JWT.EXPIRED,
-            });
 
             const emailTemplates = {
                 from: 'BudgetInApp',
                 to: email,
                 subject: 'Konfirmasi Reset Password Akun BudgetIn Kamu',
-                html: 
-                `   <!DOCTYPE html>
-                    <html>
-                        <head>
-
-                        <style>
-
-                            section{
-                                background-color: #d8f3dc;
-                                padding: 8%;
-                            }
-                            .content{
-                                width: 80%;
-                                justify-content: center;
-                                margin: 0 auto;
-                                padding: 2%;
-                                background-color: #fff;
-                            }
-
-                            p{
-                                font-size: 16px;
-                            }
-
-                            a.btn{
-                                top: 8%;
-                                padding: 12px 9px;
-                                text-decoration: none;
-                                color: #000;
-                                font-weight: 600;
-                                background-color: #d8f3dc;
-                                border-radius: 10px;
-                                margin-left: 40%;
-                                margin-right: -40%;
-                            }
-
-                            .decision-click,
-                            .token{
-                                text-align: center;
-                                background-color: #fff;
-                            }
-
-                        </style>
-
-                        </head>
-                        <body>
-                            <section>
+                html:
+                    `  
+                        <body 
+                        style="
+                            background-color: #F1F6F5;
+                        "
+                        >
+                            <section style="padding: 4% 8%;">
                                 
-                                <div class="content">
-                                    
-                                    <h2> Halo ${getUser.name}, </h2>
-                                    
-                                    <p>Untuk mengkonfirmasi permintaan reset password akun BudgetIn kamu, silakan klik tombol di bawah ini.</p>
-                                    
-                                    <a class="btn" href="https://budgetin.com/resetpassword?token=${token}">Reset Password</a>
-                    
-                                    <p class="decision-click">Atau klik tautan di bawah ini: </p>
-                                    
-                                    <p class="token"> https://budgetin.com/resetpassword?token=${token} </p>
+                                <div class="content"
+                                    style="
+                                    margin: 2% 0 0;
+                                    padding:2%; 
+                                    justify-content: center;
+                                    background-color: #FFFFFF;
+                                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                                    height: auto;"
+                                >
+                                
+                                    <img 
+                                        src="https://res.cloudinary.com/dbplhgttm/image/upload/v1670903425/Budgetin-logo_x8ecet.png" 
+                                        alt="logo-budgetin"
+                                    />
 
-                                    <p> Jika kamu tidak meminta reset password, silakan abaikan email ini.</p>
+                                    <h2 
+                                        style="
+                                        color: #000; 
+                                        text-decoration: none; 
+                                        list-style: none"
+                                    > Halo ${getUser.email}, </h2>
+                                    
+                                    <p style="text-align: center; font-size: 16px; color: #000; margin-top: 16px;">
+                                        Untuk mengkonfirmasi permintaan reset password akun BudgetIn kamu, silakan salin OTP di bawah ini.
+                                    </p>
+                    
+                                    <p  class="otp"
+                                        style="
+                                        text-align: center; 
+                                        font-size: 20px;
+                                        padding: 2%;
+                                        background-color: #000;
+                                        color: #FFF;
+                                        font-weight: 700;
+                                        width: 30%;
+                                        display: block;
+                                        margin: 0 auto;
+                                        border-radius: 5px;"
+                                    >
+                                        ${otp}
+                                    </p>
+
+                                    <p  style="text-align: center; font-size: 16px; color: #000;"> 
+                                        Jika kamu tidak meminta reset password, silakan abaikan email ini.
+                                    </p>
                                 </div>
                             </section>    
                         </body>
-                    </html>
                 `
             };
 
             passwordResetEmail(emailTemplates);
 
-            return{
-                status: true,
-                status_code: 201,
-                message: "Reset password terkirim ke email user!"
-            };
+            const updatedToken = await userRepository.handleUpdateUserToken({ email, otp });
 
+            return {
+                status: true,
+                statusCode: 201,
+                message: "Password reset sent to user email",
+                data: {
+                    updatedToken
+                }
+            };
+        }
+    };
+
+    // ------------------------- End Forgot Password ------------------------- //
+
+
+
+    // ------------------------- Reset Password ------------------------- //
+
+    static async handleResetPassword({ otp, password }) {
+
+        // ------------------------- Payload Validation ------------------------- //
+        const passwordUppercase = password.match(upperCaseLetters);
+        const passwordNumbers = password.match(numbers);
+        const passwordSpacing = password.match(spacing);
+
+        if (!password) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password is required",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        } else if (password.length < 8) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password must more than 8",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        } else if (!passwordUppercase) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password must have Uppercase",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        } else if (!passwordNumbers) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password must have Number",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        } else if (passwordSpacing) {
+            return {
+                status: false,
+                statusCode: 400,
+                message: "Password doesn't allow spaces",
+                data: {
+                    resetPassword: null,
+                },
+            };
         }
 
-    }
+        const getUserData = await userRepository.handleGetUserOTP({
+            otp,
+            password
+        });
 
-    // ------------------------- End Auth Forgot Password ------------------------- //
-}
+        if (getUserData.otp == otp) {
+
+            const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
+
+            const updateUserPassword = await userRepository.handleResetPassword({
+                otp,
+                password: hashedPassword
+            });
+
+            return {
+                status: true,
+                statusCode: 201,
+                message: "User has successfully changed the password",
+                data: {
+                    updateUserPassword,
+                },
+            };
+        } else {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Resource Unauthorized",
+                data: {
+                    resetPassword: null,
+                },
+            };
+        }
+    };
+
+    // ------------------------- End Reset Password ------------------------- //
+
+
+    // ------------------------- Auth Login With Google ------------------------- //
+
+    static async handleLoginWithGoogle({ google_credential: googleCredential }) {
+
+        try {
+
+            const client = new OAuth2Client(
+                "811794821530-3gp096cooqtmdjmn3d7qg6l2l50rjpq6.apps.googleusercontent.com"
+            );
+
+            const userInfo = await client.verifyIdToken({
+                idToken: googleCredential,
+                audience:
+                    "811794821530-3gp096cooqtmdjmn3d7qg6l2l50rjpq6.apps.googleusercontent.com",
+            });
+
+            const { email, userName } = userInfo.payload;
+
+            const getUserByEmail = await userRepository.getUsersByEmail({ email: email });
+
+            if (!getUserByEmail) {
+
+                const createdUser = await userRepository.handleRegister({ userName, email });
+
+                const token = jwt.sign({
+                    id: createdUser.id,
+                    email: createdUser.email,
+                },
+                    JWT.SECRET,
+                    {
+                        expiresIn: JWT.EXPIRED,
+                    });
+
+                return {
+                    status: true,
+                    status_code: 201,
+                    message: "Successfully registered user!",
+                    data: {
+                        token,
+                        loginGoogle: createdUser,
+                    }
+                };
+            }
+
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Resource Unauthorized",
+                data: {
+                    loginGoolge: null,
+                },
+            };
+        }
+
+    };
+
+    // ------------------------- End Auth Login With Google ------------------------- //
+
+};
 
 module.exports = authService;
