@@ -53,8 +53,8 @@ const updateUserById = async (req, res, next) => {
         id
     } = req.params;
     const {
-        tanggal_lahir,
-        jenis_kelamin,
+        dateOfBirth,
+        gender,
     } = req.body;
     
 
@@ -65,8 +65,8 @@ const updateUserById = async (req, res, next) => {
         data
     } = await userService.updateUserById({
         id,
-        tanggal_lahir,
-        jenis_kelamin,
+        dateOfBirth,
+        gender,
         image: req.file,
     });
 
@@ -80,8 +80,105 @@ const updateUserById = async (req, res, next) => {
 // ------------------------- End Update User By Id ------------------------- //
 
 
+
+const getTransactionIncomeByUserId = async (req, res, next) => {
+    const {
+        id
+    } = req.params;
+    const {
+        descriptionIncome,
+        priceIncome,
+        dateIncome,
+    } = req.query;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } =
+    await userService.getTransactionIncomeByUserId({
+        id,
+        descriptionIncome,
+        priceIncome,
+        dateIncome,
+    });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+};
+
+const getTransactionOutcomeByUserId = async (req, res, next) => {
+    const {
+        id
+    } = req.params;
+    const {
+        descriptionOutcome,
+        priceOutcome,
+        dateOutcome,
+    } = req.query;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } =
+    await userService.getTransactionOutcomeByUserId({
+        id,
+        descriptionOutcome,
+        priceOutcome,
+        dateOutcome,
+    });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+};
+
+const getTargetByUserId = async (req, res, next) => {
+    const {
+        id
+    } = req.params;
+    const {
+        nameTarget,
+        nominalTarget,
+        dateTarget,
+        image
+    } = req.query;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } =
+    await userService.getTargetByUserId({
+        id,
+        nameTarget,
+        nominalTarget,
+        dateTarget,
+        image
+    });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+};
+
 module.exports = {
     getAllUsers,
     getUserById,
-    updateUserById
+    updateUserById,
+    resetPasswordById,
+    getTransactionIncomeByUserId,
+    getTransactionOutcomeByUserId,
+    getTargetByUserId,
 };

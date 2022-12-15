@@ -1,5 +1,9 @@
+const sequelize = require("sequelize");
 const {
-    users
+    transactionIncome,
+    transactionOutcome,
+    users,
+    targets
 } = require("../models");
 
 class userRepository {
@@ -14,7 +18,7 @@ class userRepository {
 
     // ------------------------- End Get All Users ------------------------- //
 
-    
+
     // ------------------------- Get User By Id ------------------------- //
 
     static async getUserById({
@@ -91,13 +95,13 @@ class userRepository {
 
     static async updateUserById({
         id,
-        tanggal_lahir,
-        jenis_kelamin,
+        dateOfBirth,
+        gender,
         image
     }) {
         const updateUserById = await users.update({
-            tanggal_lahir,
-            jenis_kelamin,
+            dateOfBirth,
+            gender,
             image
         }, {
             where: {
@@ -158,6 +162,145 @@ class userRepository {
     }
     
     // ------------------------- End Update User Password  ------------------------- //
-};
+
+    // ------------------------- End Update User By Id ------------------------- //
+
+    static async getTransactionIncomeByUserId({
+        id,
+        descriptionIncome,
+        priceIncome,
+        dateIncome,
+    }) {
+        const query = {
+            where: {}
+        }
+
+        if (id) {
+            query.where = {
+                ...query.where,
+                user_id: id
+            }
+        }
+
+        if (descriptionIncome) {
+            query.where = {
+                ...query.where,
+                descriptionIncome
+            }
+        }
+
+        if (priceIncome) {
+            query.where = {
+                ...query.where,
+                priceIncome
+            }
+        }
+
+        if (dateIncome) {
+            query.where = {
+                ...query.where,
+                dateIncome
+            }
+        }
+
+        const getTransactionIncomeByUserId = await transactionIncome.findAll(query);
+
+        return getTransactionIncomeByUserId;
+    }
+
+    static async getTransactionOutcomeByUserId({
+        id,
+        descriptionOutcome,
+        priceOutcome,
+        dateOutcome,
+    }) {
+        const query = {
+            where: {}
+        }
+
+        if (id) {
+            query.where = {
+                ...query.where,
+                user_id: id
+            }
+        }
+
+        if (descriptionOutcome) {
+            query.where = {
+                ...query.where,
+                descriptionOutcome
+            }
+        }
+
+        if (priceOutcome) {
+            query.where = {
+                ...query.where,
+                priceOutcome
+            }
+        }
+
+        if (dateOutcome) {
+            query.where = {
+                ...query.where,
+                dateOutcome
+            }
+        }
+
+        const getTransactionOutcomeByUserId = await transactionOutcome.findAll(query);
+
+        return getTransactionOutcomeByUserId;
+    }
+
+    static async getTargetByUserId({
+        id,
+        nameTarget,
+        nominalTarget,
+        dateTarget,
+        image
+    }) {
+        const query = {
+            where: {}
+        }
+
+        if (id) {
+            query.where = {
+                ...query.where,
+                user_id: id
+            }
+        }
+
+        if (nameTarget) {
+            query.where = {
+                ...query.where,
+                nameTarget
+            }
+        }
+
+        if (nominalTarget) {
+            query.where = {
+                ...query.where,
+                nominalTarget
+            }
+        }
+
+        if (dateTarget) {
+            query.where = {
+                ...query.where,
+                dateTarget
+            }
+        }
+
+        if (image) {
+            query.where = {
+                ...query.where,
+                image
+            }
+        }
+
+        const getTargetByUserId = await targets.findAll(query);
+
+        return getTargetByUserId;
+    }
+}
 
 module.exports = userRepository;
