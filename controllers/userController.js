@@ -177,7 +177,6 @@ module.exports = {
     getAllUsers,
     getUserById,
     updateUserById,
-    resetPasswordById,
     getTransactionIncomeByUserId,
     getTransactionOutcomeByUserId,
     getTargetByUserId,

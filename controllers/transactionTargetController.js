@@ -90,8 +90,31 @@ const getTransactionByTargetsId = async (req, res) => {
     });
 };
 
+const totalNominal = async (req, res) => {
+    const {id} = req.params;
+    const user_id = req.user.id;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } =
+    await transactionTargetService.totalNominal({
+        id,
+        user_id,
+    });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+}
+
 module.exports = {
     createTransactionTarget,
+    totalNominal,
     updateTransactionTarget,
     getTransactionByTargetsId
 }

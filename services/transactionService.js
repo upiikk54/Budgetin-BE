@@ -360,6 +360,95 @@ class transactionService {
             };
         }
     };
+
+    static async totalIncome({
+        user_id,
+    }) {
+        const totalIncome = await transactionRepository.totalIncome({
+            user_id,
+        });
+
+        return {
+            status: true,
+            statusCode: 201,
+            message: "Pemasukan berhasil dijumlah",
+            data: {
+                total_income: totalIncome,
+            },
+        };
+    };
+
+    static async totalOutcome({
+        user_id,
+    }) {
+        const totalOutcome = await transactionRepository.totalOutcome({
+            user_id,
+        });
+
+        return {
+            status: true,
+            statusCode: 201,
+            message: "Pengeluaran berhasil dijumlah",
+            data: {
+                total_income: totalOutcome,
+            },
+        };
+    };
+
+    static async filteredIncome({
+        descriptionIncome, priceIncome
+    }) {
+        try {
+            const getAllTransactionIncome = await transactionRepository.getAllTransactionIncome({
+                descriptionIncome, priceIncome
+            });
+
+            return {
+                status: true,
+                statusCode: 200,
+                message: "data product berhasil ditampilkan",
+                data: {
+                    filteredIncome: getAllTransactionIncome,
+                },
+            };
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 500,
+                message: err.message,
+                data: {
+                    filtered_income: null,
+                },
+            };
+        }
+    }
+    static async filteredOutcome({
+        descriptionOutcome, priceOutcome
+    }) {
+        try {
+            const getAllTransactionOutcome = await transactionRepository.getAllTransactionOutcome({
+                descriptionOutcome, priceOutcome
+            });
+
+            return {
+                status: true,
+                statusCode: 200,
+                message: "data product berhasil ditampilkan",
+                data: {
+                    filteredOutcome: getAllTransactionOutcome,
+                },
+            };
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 500,
+                message: err.message,
+                data: {
+                    filtered_outcome: null,
+                },
+            };
+        }
+    }
 }
 
 module.exports = transactionService;

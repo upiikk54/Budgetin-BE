@@ -129,6 +129,25 @@ class transactionTargetService {
             },
         };
     }
+
+    static async totalNominal({
+        id,
+        user_id,
+    }) {
+        const totalNominal = await transactionTargetRepository.totalNominal({
+            id,
+            user_id,
+        });
+
+        return {
+            status: true,
+            statusCode: 201,
+            message: "transaksi tujuan berhasil dijumlah",
+            data: {
+                total_nominal: totalNominal,
+            },
+        };
+    };
 }
 
 module.exports = transactionTargetService;

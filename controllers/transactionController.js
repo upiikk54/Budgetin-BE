@@ -215,8 +215,88 @@ const deleteTransactionOutcomeByUserId = async (req, res) => {
     });
 };
 
+const totalIncome = async (req, res) => {
+
+    const user_id = req.user.id;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } =
+    await transactionService.totalIncome({
+        user_id,
+    });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+};
+
+const totalOutcome = async (req, res) => {
+
+    const user_id = req.user.id;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } =
+    await transactionService.totalOutcome({
+        user_id,
+    });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+};
+
+const filteredIncome = async (req, res) => {
+    const { descriptionIncome, priceIncome } = req.query;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } = await transactionService.filteredIncome({descriptionIncome, priceIncome });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+}
+
+const filteredOutcome = async (req, res) => {
+    const { descriptionOutcome, priceOutcome } = req.query;
+
+    const {
+        status,
+        statusCode,
+        message,
+        data
+    } = await transactionService.filteredOutcome({descriptionOutcome, priceOutcome });
+
+    res.status(statusCode).send({
+        status: status,
+        message: message,
+        data: data,
+    });
+}
+
 module.exports = {
     createTransactionIncome,
+    filteredOutcome,
+    filteredIncome,
+    totalIncome,
+    totalOutcome,
     getAllTransactionIncome,
     updateTransactionIncomeById,
     deleteTransactionIncomeByUserId,

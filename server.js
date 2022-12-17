@@ -59,7 +59,8 @@ app.put("/api/users/:id", middlewares.authenticate, upload.single("image"), user
 
 
 // ------------------- Define Routes Transaction Income ------------------- //
-
+app.get("/api/transaction/filteredIncome?", middlewares.authenticate, transactionController.filteredIncome);
+app.get("/api/transaction/totalIncome", middlewares.authenticate, transactionController.totalIncome);
 app.post("/api/transaction/create", middlewares.authenticate, transactionController.createTransactionIncome);
 app.put("/api/transaction/update/:id", middlewares.authenticate, transactionController.updateTransactionIncomeById);
 app.get("/api/transaction/getAllData", transactionController.getAllTransactionIncome);
@@ -69,7 +70,8 @@ app.delete("/api/transaction/delete/:id", middlewares.authenticate, transactionC
 // ------------------- Define Routes Transaction Income ------------------- //
 
 // ------------------- Define Routes Transaction Outcome ------------------- //
-
+app.get("/api/transaction/filteredOutcome?", middlewares.authenticate, transactionController.filteredOutcome);
+app.get("/api/transaction/totalOutcome", middlewares.authenticate, transactionController.totalOutcome);
 app.post("/api/transactionOutcome/create", middlewares.authenticate, transactionController.createTransactionOutcome);
 app.put("/api/transactionOutcome/update/:id", middlewares.authenticate, transactionController.updateTransactionOutcomeById);
 app.get("/api/transactionOutcome/getAllData", transactionController.getAllTransactionOutcome);
@@ -89,7 +91,7 @@ app.delete("/api/target/delete/:id", middlewares.authenticate, targetController.
 // ------------------- Define Routes Transaction Targets ------------------- //
 
 // ------------------- Define Routes Transaction TransactionTarget ------------------- //
-
+app.get("/api/transactionTarget/totalTransactionTarget/:id", middlewares.authenticate, transactionTargetController.totalNominal);
 app.post("/api/transactionTarget/create", middlewares.authenticate, transactionTargetController.createTransactionTarget);
 app.put("/api/transactionTarget/update/:id", middlewares.authenticate, transactionTargetController.updateTransactionTarget);
 app.get("/api/transactionTarget/:id", middlewares.authenticate, transactionTargetController.getTransactionByTargetsId);

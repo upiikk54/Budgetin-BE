@@ -1,7 +1,8 @@
+const sequelize = require("sequelize");
 const {
     transactiontargets,
     targets
-} = require("../models")
+} = require("../models");
 
 class transactionTargetRepository {
     static async createdTransactionTarget({
@@ -85,7 +86,20 @@ class transactionTargetRepository {
 
         const getTransactionByTargetsId = await transactiontargets.findAll(query);
         return getTransactionByTargetsId;
-    }
+    };
+
+    static async totalNominal({
+        id,
+        user_id,
+    }) {
+        const totalNominal = await transactiontargets.findAll({
+            attributes: [[sequelize.fn('sum', sequelize.col('nominalTransactionTarget')), 'totalnominal']],
+            where: {target_id: id, user_id},
+            raw: true
+        })
+        
+        return totalNominal
+    };
 }
 
 module.exports = transactionTargetRepository;
