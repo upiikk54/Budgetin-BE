@@ -36,21 +36,6 @@ const createTransactionIncome = async (req, res) => {
 // ------------------------- and createTransactionIncome ------------------------- //
 
 
-const getAllTransactionIncome = async (req, res) => {
-    const {
-        status,
-        statusCode,
-        message,
-        data
-    } = await transactionService.getAllTransactionIncome();
-
-    res.status(statusCode).send({
-        status: status,
-        message: message,
-        data: data,
-    });
-};
-
 const updateTransactionIncomeById = async (req, res, next) => {
     const {
         id
@@ -140,21 +125,6 @@ const createTransactionOutcome = async (req, res) => {
         data: data,
     });
 }
-
-const getAllTransactionOutcome = async (req, res) => {
-    const {
-        status,
-        statusCode,
-        message,
-        data
-    } = await transactionService.getAllTransactionOutcome();
-
-    res.status(statusCode).send({
-        status: status,
-        message: message,
-        data: data,
-    });
-};
 
 const updateTransactionOutcomeById = async (req, res, next) => {
     const {
@@ -297,11 +267,9 @@ module.exports = {
     filteredIncome,
     totalIncome,
     totalOutcome,
-    getAllTransactionIncome,
     updateTransactionIncomeById,
     deleteTransactionIncomeByUserId,
     createTransactionOutcome,
-    getAllTransactionOutcome,
     updateTransactionOutcomeById,
     deleteTransactionOutcomeByUserId
 }

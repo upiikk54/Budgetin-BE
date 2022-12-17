@@ -133,20 +133,6 @@ class transactionService {
 
     };
 
-    static async getAllTransactionIncome() {
-
-        const getAllTransactionIncome = await transactionRepository.getAllTransactionIncome();
-
-        return {
-            status: true,
-            statusCode: 200,
-            message: "successfully retrieve user data",
-            data: {
-                getAllTransactionIncome: getAllTransactionIncome,
-            },
-        };
-
-    };
 
     static async deleteTransactionIncomeByUserId({
         id,
@@ -313,20 +299,6 @@ class transactionService {
 
     };
 
-    static async getAllTransactionOutcome() {
-
-        const getAllTransactionOutcome = await transactionRepository.getAllTransactionOutcome();
-
-        return {
-            status: true,
-            statusCode: 200,
-            message: "successfully retrieve user data",
-            data: {
-                getAllTransactionOutcome: getAllTransactionOutcome,
-            },
-        };
-
-    };
 
     static async deleteTransactionOutcomeByUserId({
         id,

@@ -59,7 +59,7 @@ app.put("/api/users/:id", middlewares.authenticate, upload.single("image"), user
 
 
 // ------------------- Define Routes Transaction Income ------------------- //
-app.get("/api/transaction/filteredIncome?", middlewares.authenticate, transactionController.filteredIncome);
+app.get("/api/transaction/filteredIncome", middlewares.authenticate, transactionController.filteredIncome);
 app.get("/api/transaction/totalIncome", middlewares.authenticate, transactionController.totalIncome);
 app.post("/api/transaction/create", middlewares.authenticate, transactionController.createTransactionIncome);
 app.put("/api/transaction/update/:id", middlewares.authenticate, transactionController.updateTransactionIncomeById);
@@ -70,7 +70,7 @@ app.delete("/api/transaction/delete/:id", middlewares.authenticate, transactionC
 // ------------------- Define Routes Transaction Income ------------------- //
 
 // ------------------- Define Routes Transaction Outcome ------------------- //
-app.get("/api/transaction/filteredOutcome?", middlewares.authenticate, transactionController.filteredOutcome);
+app.get("/api/transaction/filteredOutcome", middlewares.authenticate, transactionController.filteredOutcome);
 app.get("/api/transaction/totalOutcome", middlewares.authenticate, transactionController.totalOutcome);
 app.post("/api/transactionOutcome/create", middlewares.authenticate, transactionController.createTransactionOutcome);
 app.put("/api/transactionOutcome/update/:id", middlewares.authenticate, transactionController.updateTransactionOutcomeById);
