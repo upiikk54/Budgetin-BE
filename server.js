@@ -63,7 +63,6 @@ app.get("/api/transaction/filteredIncome", middlewares.authenticate, transaction
 app.get("/api/transaction/totalIncome", middlewares.authenticate, transactionController.totalIncome);
 app.post("/api/transaction/create", middlewares.authenticate, transactionController.createTransactionIncome);
 app.put("/api/transaction/update/:id", middlewares.authenticate, transactionController.updateTransactionIncomeById);
-app.get("/api/transaction/getAllData", transactionController.getAllTransactionIncome);
 app.get("/users/:id/transaction", middlewares.authenticate, userController.getTransactionIncomeByUserId);
 app.delete("/api/transaction/delete/:id", middlewares.authenticate, transactionController.deleteTransactionIncomeByUserId);
 
@@ -74,7 +73,6 @@ app.get("/api/transaction/filteredOutcome", middlewares.authenticate, transactio
 app.get("/api/transaction/totalOutcome", middlewares.authenticate, transactionController.totalOutcome);
 app.post("/api/transactionOutcome/create", middlewares.authenticate, transactionController.createTransactionOutcome);
 app.put("/api/transactionOutcome/update/:id", middlewares.authenticate, transactionController.updateTransactionOutcomeById);
-app.get("/api/transactionOutcome/getAllData", transactionController.getAllTransactionOutcome);
 app.get("/users/:id/transactionOutcome", middlewares.authenticate, userController.getTransactionOutcomeByUserId);
 app.delete("/api/transactionOutcome/delete/:id", middlewares.authenticate, transactionController.deleteTransactionOutcomeByUserId);
 
