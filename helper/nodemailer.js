@@ -18,6 +18,5 @@ exports.passwordResetEmail = emailData => {
         transporter.sendMail(emailData)
         .then(info =>  console.log(`E-mail sent: ${info.messageId}`))
         .catch(err =>  console.log(`There is an error: ${err}`))
-
     );
 }

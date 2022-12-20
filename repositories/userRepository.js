@@ -9,18 +9,15 @@ const {
 class userRepository {
 
     // ------------------------- Get All Users ------------------------- //
-
     static async getAllUsers() {
         const getUser = await users.findAll();
 
         return getUser;
     };
-
     // ------------------------- End Get All Users ------------------------- //
 
 
     // ------------------------- Get User By Id ------------------------- //
-
     static async getUserById({
         id
     }) {
@@ -32,12 +29,10 @@ class userRepository {
 
         return getUser;
     };
-
     // ------------------------- End Get User By Id ------------------------- //
 
 
     // ------------------------- Get Users By Username ------------------------- //
-
     static async getUsersByUsername({
         userName
     }) {
@@ -49,12 +44,10 @@ class userRepository {
 
         return getUser;
     };
-
     // ------------------------- End Get Users By Username ------------------------- //
 
 
     // ------------------------- Get Users By By Email ------------------------- //
-
     static async getUsersByEmail({
         email
     }) {
@@ -66,12 +59,10 @@ class userRepository {
 
         return getUser;
     };
-
     // ------------------------- End Get Users By By Email ------------------------- //
 
 
     // ------------------------- Register ------------------------- //
-
     static async handleRegister({
         userName,
         email,
@@ -87,12 +78,10 @@ class userRepository {
 
         return registeredUser;
     };
-
     // ------------------------- End Register ------------------------- //
 
 
     // ------------------------- Update User By Id ------------------------- //
-
     static async updateUserById({
         id,
         dateOfBirth,
@@ -111,12 +100,10 @@ class userRepository {
 
         return updateUserById;
     };
-
     // ------------------------- End Update User By Id ------------------------- //
 
 
     // ------------------------- Update User Token  ------------------------- //
-
     static async handleUpdateUserToken({ email, otp }){
 
         const updatedToken = await users.update({
@@ -127,11 +114,9 @@ class userRepository {
 
         return updatedToken;
     };
-
     // ------------------------- End Update User Token  ------------------------- //
 
     // ------------------------- Get User Token  ------------------------- //
-
     static async handleGetUserOTP({ otp, password }){
 
         const getUserData = await users.findOne({
@@ -141,13 +126,11 @@ class userRepository {
         });
 
         return getUserData;
-    }
-
+    };
     // ------------------------- End Get User Token  ------------------------- //
 
 
     // ------------------------- Update User Password  ------------------------- //
-    
     static async handleResetPassword({ otp, password }){
 
         const updateUserPassword = await users.update({
@@ -159,12 +142,10 @@ class userRepository {
         });
 
         return updateUserPassword;
-    }
-    
+    };
     // ------------------------- End Update User Password  ------------------------- //
 
-    // ------------------------- End Update User By Id ------------------------- //
-
+    // ------------------------- Get Transaction Income By User Id ------------------------- //
     static async getTransactionIncomeByUserId({
         id,
         descriptionIncome,
@@ -206,8 +187,10 @@ class userRepository {
         const getTransactionIncomeByUserId = await transactionIncome.findAll(query);
 
         return getTransactionIncomeByUserId;
-    }
+    };
+    // ------------------------- End Get Transaction Income By User Id ------------------------- //
 
+    // ------------------------- Get Transaction Outcome By User Id ------------------------- //
     static async getTransactionOutcomeByUserId({
         id,
         descriptionOutcome,
@@ -249,8 +232,10 @@ class userRepository {
         const getTransactionOutcomeByUserId = await transactionOutcome.findAll(query);
 
         return getTransactionOutcomeByUserId;
-    }
+    };
+    // ------------------------- End Get Transaction Outcome By User Id ------------------------- //
 
+    // ------------------------- Get Target By User Id ------------------------- //
     static async getTargetByUserId({
         id,
         nameTarget,
@@ -300,7 +285,9 @@ class userRepository {
         const getTargetByUserId = await targets.findAll(query);
 
         return getTargetByUserId;
-    }
+    };
+    // ------------------------- End Get Target By User Id ------------------------- //
+
 }
 
 module.exports = userRepository;

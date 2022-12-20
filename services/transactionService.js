@@ -8,66 +8,78 @@ class transactionService {
         dateIncome,
         descriptionIncome,
     }) {
-        if (!priceIncome) {
+        try {
+            if (!priceIncome) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Nominal pemasukan harus diisi.",
+                    data: {
+                        created_transaksiIncome: null,
+                    },
+                };
+            }
+
+            if (!categoryIncome) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Kategori pemasukan harus diisi.",
+                    data: {
+                        created_transaksiIncome: null,
+                    },
+                };
+            }
+
+            if (!dateIncome) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Tanggal pemasukan harus diisi.",
+                    data: {
+                        created_transaksiIncome: null,
+                    },
+                };
+            }
+
+            if (!descriptionIncome) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Catatan harus diisi.",
+                    data: {
+                        created_transaksiIncome: null,
+                    },
+                };
+            }
+
+            const createTransactionIncome = await transactionRepository.createTransactionIncome({
+                user_id,
+                priceIncome,
+                categoryIncome,
+                dateIncome,
+                descriptionIncome,
+            });
+
+            return {
+                status: true,
+                statusCode: 201,
+                message: "Berhasil membuat pemasukan.",
+                data: {
+                    created_transaksiIncome: createTransactionIncome,
+                },
+            };
+        } catch (err) {
             return {
                 status: false,
-                statusCode: 400,
-                message: "price income is required",
+                statusCode: 401,
+                message: "Sumber tidak ada.",
                 data: {
-                    created_transaksi: null,
+                    created_transaksiIncome: null,
                 },
             };
         }
 
-        if (!categoryIncome) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "price income is required",
-                data: {
-                    created_transaksi: null,
-                },
-            };
-        }
-
-        if (!dateIncome) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "date income is required",
-                data: {
-                    created_transaksi: null,
-                },
-            };
-        }
-
-        if (!descriptionIncome) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "description income is required",
-                data: {
-                    created_transaksi: null,
-                },
-            };
-        }
-
-        const createTransactionIncome = await transactionRepository.createTransactionIncome({
-            user_id,
-            priceIncome,
-            categoryIncome,
-            dateIncome,
-            descriptionIncome,
-        });
-
-        return {
-            status: true,
-            statusCode: 201,
-            message: "created transaction Income successfully",
-            data: {
-                created_transaksiIncome: createTransactionIncome,
-            },
-        };
     };
 
     static async updateTransactionIncomeById({
@@ -115,16 +127,16 @@ class transactionService {
             return {
                 status: true,
                 statusCode: 200,
-                message: "Transaction Income updated successfully",
+                message: "Pemasukan berhasil diperbarui",
                 data: {
                     updateTransactionIncomeById: updateTransactionIncomeById,
                 },
             };
         } else {
             return {
-                status: true,
+                status: false,
                 statusCode: 401,
-                message: "Resource Unauthorized",
+                message: "Sumber tidak ada.",
                 data: {
                     updateTransactionIncomeById: null,
                 },
@@ -132,7 +144,6 @@ class transactionService {
         }
 
     };
-
 
     static async deleteTransactionIncomeByUserId({
         id,
@@ -150,16 +161,16 @@ class transactionService {
             return {
                 status: true,
                 statusCode: 200,
-                message: "Transaction Income deleted successfully",
+                message: "Pemasukan berhasil dihapus.",
                 data: {
                     deleteTransactionIncomeByUserId: deleteTransactionIncomeByUserId,
                 },
             };
         } else {
             return {
-                status: true,
+                status: false,
                 statusCode: 401,
-                message: "Resource Unauthorized",
+                message: "Sumber tidak ada.",
                 data: {
                     deleteTransactionIncomeByUserId: null,
                 },
@@ -174,66 +185,77 @@ class transactionService {
         dateOutcome,
         descriptionOutcome,
     }) {
-        if (!priceOutcome) {
+        try {
+            if (!priceOutcome) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Nominal pengeluaran harus diisi.",
+                    data: {
+                        created_transaksiOutcome: null,
+                    },
+                };
+            }
+
+            if (!categoryOutcome) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Kategori pengeluaran harus diisi.",
+                    data: {
+                        created_transaksiOutcome: null,
+                    },
+                };
+            }
+
+            if (!dateOutcome) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Tanggal pengeluaran harus diisi.",
+                    data: {
+                        created_transaksiOutcome: null,
+                    },
+                };
+            }
+
+            if (!descriptionOutcome) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Catatan pengeluaran harus diisi.",
+                    data: {
+                        created_transaksiOutcome: null,
+                    },
+                };
+            }
+
+            const createTransactionOutcome = await transactionRepository.createTransactionOutcome({
+                user_id,
+                priceOutcome,
+                categoryOutcome,
+                dateOutcome,
+                descriptionOutcome,
+            });
+
+            return {
+                status: true,
+                statusCode: 201,
+                message: "Berhasil membuat pengeluaran.",
+                data: {
+                    created_transaksiOutcome: createTransactionOutcome,
+                },
+            };
+        } catch (err) {
             return {
                 status: false,
-                statusCode: 400,
-                message: "price Outcome is required",
+                statusCode: 401,
+                message: "Sumber tidak ada.",
                 data: {
-                    createTransactionOutcome: null,
+                    created_transaksiOutcome: null,
                 },
             };
         }
-
-        if (!categoryOutcome) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "price Outcome is required",
-                data: {
-                    createTransactionOutcome: null,
-                },
-            };
-        }
-
-        if (!dateOutcome) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "date Outcome is required",
-                data: {
-                    createTransactionOutcome: null,
-                },
-            };
-        }
-
-        if (!descriptionOutcome) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "description Outcome is required",
-                data: {
-                    createTransactionOutcome: null,
-                },
-            };
-        }
-
-        const createTransactionOutcome = await transactionRepository.createTransactionOutcome({
-            user_id,
-            priceOutcome,
-            categoryOutcome,
-            dateOutcome,
-            descriptionOutcome,
-        });
-
-        return {
-            status: true,
-            statusCode: 201,
-            message: "created transaction Outcome successfully",
-            data: {
-                createTransactionOutcome: createTransactionOutcome,
-            },
-        };
     };
 
     static async updateTransactionOutcomeById({
@@ -281,16 +303,16 @@ class transactionService {
             return {
                 status: true,
                 statusCode: 200,
-                message: "Transaction Outcome updated successfully",
+                message: "Pengeluaran berhasil diperbarui.",
                 data: {
                     updateTransactionOutcomeById: updateTransactionOutcomeById,
                 },
             };
         } else {
             return {
-                status: true,
+                status: false,
                 statusCode: 401,
-                message: "Resource Unauthorized",
+                message: "Sumber tidak ada.",
                 data: {
                     updateTransactionOutcomeById: null,
                 },
@@ -298,7 +320,6 @@ class transactionService {
         }
 
     };
-
 
     static async deleteTransactionOutcomeByUserId({
         id,
@@ -316,16 +337,16 @@ class transactionService {
             return {
                 status: true,
                 statusCode: 200,
-                message: "Transaction Outcome deleted successfully",
+                message: "Pengeluaran berhasil dihapus.",
                 data: {
                     deleteTransactionOutcomeByUserId: deleteTransactionOutcomeByUserId,
                 },
             };
         } else {
             return {
-                status: true,
+                status: false,
                 statusCode: 401,
-                message: "Resource Unauthorized",
+                message: "Sumber tidak ada.",
                 data: {
                     deleteTransactionOutcomeByUserId: null,
                 },
@@ -336,43 +357,67 @@ class transactionService {
     static async totalIncome({
         user_id,
     }) {
-        const totalIncome = await transactionRepository.totalIncome({
-            user_id,
-        });
+        try {
+            const totalIncome = await transactionRepository.totalIncome({
+                user_id,
+            });
 
-        return {
-            status: true,
-            statusCode: 201,
-            message: "Pemasukan berhasil dijumlah",
-            data: {
-                total_income: totalIncome,
-            },
-        };
+            return {
+                status: true,
+                statusCode: 201,
+                message: "Pemasukan berhasil dijumlah",
+                data: {
+                    total_income: totalIncome,
+                },
+            };
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Sumber tidak ada.",
+                data: {
+                    total_income: null,
+                },
+            };
+        }
+
     };
 
     static async totalOutcome({
         user_id,
     }) {
-        const totalOutcome = await transactionRepository.totalOutcome({
-            user_id,
-        });
-
-        return {
-            status: true,
-            statusCode: 201,
-            message: "Pengeluaran berhasil dijumlah",
-            data: {
-                total_income: totalOutcome,
-            },
-        };
+        try {
+            const totalOutcome = await transactionRepository.totalOutcome({
+                user_id,
+            });
+            return {
+                status: true,
+                statusCode: 201,
+                message: "Pengeluaran berhasil dijumlah",
+                data: {
+                    total_Outcome: totalOutcome,
+                },
+            };
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Sumber tidak ada.",
+                data: {
+                    total_Outcome: null,
+                },
+            };
+        }
     };
 
     static async filteredIncome({
-        descriptionIncome, priceIncome
+        descriptionIncome,
+        priceIncome
     }) {
         try {
             const getAllTransactionIncome = await transactionRepository.getAllTransactionIncome({
-                descriptionIncome, priceIncome
+                descriptionIncome,
+                priceIncome
             });
 
             return {
@@ -393,13 +438,16 @@ class transactionService {
                 },
             };
         }
-    }
+    };
+    
     static async filteredOutcome({
-        descriptionOutcome, priceOutcome
+        descriptionOutcome,
+        priceOutcome
     }) {
         try {
             const getAllTransactionOutcome = await transactionRepository.getAllTransactionOutcome({
-                descriptionOutcome, priceOutcome
+                descriptionOutcome,
+                priceOutcome
             });
 
             return {
@@ -420,7 +468,7 @@ class transactionService {
                 },
             };
         }
-    }
+    };
 }
 
 module.exports = transactionService;

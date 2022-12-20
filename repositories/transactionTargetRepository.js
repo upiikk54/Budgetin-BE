@@ -5,6 +5,7 @@ const {
 } = require("../models");
 
 class transactionTargetRepository {
+    // ------------------------- Create Transaction Target ------------------------- //
     static async createdTransactionTarget({
         target_id,
         user_id,
@@ -20,7 +21,9 @@ class transactionTargetRepository {
 
         return createdTransactionTarget;
     };
+    // ------------------------- End Create Transaction Target ------------------------- //
 
+    // ------------------------- Update Transaction Target ------------------------- //
     static async updateTransactionTarget({
         id,
         target_id,
@@ -39,7 +42,9 @@ class transactionTargetRepository {
 
         return updateTransactionTarget;
     };
+    // ------------------------- End Update Transaction Target ------------------------- //
 
+    // ------------------------- Get Transaction Target By Id ------------------------- //
     static async getTransactionTargetById({
         id
     }) {
@@ -51,7 +56,9 @@ class transactionTargetRepository {
 
         return getTarget;
     };
+    // ------------------------- End Get Transaction Target By Id ------------------------- //
 
+    // ------------------------- Get Transaction Target By Target Id ------------------------- //
     static async getTransactionByTargetsId({
         id,
         nominalTransactionTarget,
@@ -87,7 +94,9 @@ class transactionTargetRepository {
         const getTransactionByTargetsId = await transactiontargets.findAll(query);
         return getTransactionByTargetsId;
     };
+    // ------------------------- End Get Transaction Target By Target Id ------------------------- //
 
+    // ------------------------- Total Nominal ------------------------- //
     static async totalNominal({
         id,
         user_id,
@@ -100,6 +109,7 @@ class transactionTargetRepository {
         
         return totalNominal
     };
+    // ------------------------- End Total Nominal ------------------------- //
 }
 
 module.exports = transactionTargetRepository;

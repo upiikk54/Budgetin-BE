@@ -1,7 +1,6 @@
 const userService = require('../services/userService');
 
 // ------------------------- Get All Users ------------------------- //
-
 const getAllUsers = async (req, res) => {
     const {
         status,
@@ -16,12 +15,10 @@ const getAllUsers = async (req, res) => {
         data: data,
     });
 };
-
 // ------------------------- End Get All Users ------------------------- //
 
 
 // ------------------------- Get User By Id ------------------------- //
-
 const getUserById = async (req, res) => {
     const {
         id
@@ -42,12 +39,10 @@ const getUserById = async (req, res) => {
         data: data,
     });
 };
-
 // ------------------------- End Get User By Id ------------------------- //
 
 
 // ------------------------- Update User By Id ------------------------- //
-
 const updateUserById = async (req, res, next) => {
     const {
         id
@@ -76,11 +71,9 @@ const updateUserById = async (req, res, next) => {
         data: data,
     });
 };
-
 // ------------------------- End Update User By Id ------------------------- //
 
-
-
+// ------------------------- Get Transaction Income By User Id ------------------------- //
 const getTransactionIncomeByUserId = async (req, res, next) => {
     const {
         id
@@ -110,7 +103,9 @@ const getTransactionIncomeByUserId = async (req, res, next) => {
         data: data,
     });
 };
+// ------------------------- End Get Transaction Income By User Id ------------------------- //
 
+// ------------------------- Get Transaction Outcome By User Id ------------------------- //
 const getTransactionOutcomeByUserId = async (req, res, next) => {
     const {
         id
@@ -140,7 +135,9 @@ const getTransactionOutcomeByUserId = async (req, res, next) => {
         data: data,
     });
 };
+// ------------------------- End Get Transaction Outcome By User Id ------------------------- //
 
+// ------------------------- Get Target By User Id ------------------------- //
 const getTargetByUserId = async (req, res, next) => {
     const {
         id
@@ -172,6 +169,7 @@ const getTargetByUserId = async (req, res, next) => {
         data: data,
     });
 };
+// ------------------------- End Get Target By User Id ------------------------- //
 
 module.exports = {
     getAllUsers,

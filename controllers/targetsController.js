@@ -1,5 +1,6 @@
 const targetService = require("../services/targetService")
 
+// ------------------------- Create Target ------------------------- //
 const createTarget = async (req, res) => {
     const {
         nameTarget,
@@ -29,7 +30,9 @@ const createTarget = async (req, res) => {
         data: data,
     });
 };
+// ------------------------- End Create Target ------------------------- //
 
+// ------------------------- Update Target ------------------------- //
 const updateTarget = async (req, res) => {
     const {
         id
@@ -64,7 +67,9 @@ const updateTarget = async (req, res) => {
         data: data,
     });
 };
+// ------------------------- End Update Target ------------------------- //
 
+// ------------------------- Delete Target ------------------------- //
 const deleteTarget = async (req, res) => {
     const {
         id
@@ -88,7 +93,9 @@ const deleteTarget = async (req, res) => {
         data: data,
     });
 };
+// ------------------------- End Delete Target ------------------------- //
 
+// ------------------------- Get Target By Id------------------------- //
 const getTargetById = async (req, res) => {
     const {
         id
@@ -109,6 +116,7 @@ const getTargetById = async (req, res) => {
         data: data,
     });
 };
+// ------------------------- End Get Target By Id------------------------- //
 
 module.exports = {
     createTarget,

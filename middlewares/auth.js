@@ -14,7 +14,7 @@ const authenticate = async (req, res, next) => {
     else
         return res.status(401).send({
             status: false,
-            message: "You must be logged in to access this resource.",
+            message: "Kamu harus login untuk mengakses fitur ini.",
             data: null,
         });
 
@@ -33,7 +33,7 @@ const authenticate = async (req, res, next) => {
     } catch (err) {
         return res.status(401).send({
             status: false,
-            message: "Session has expired. Please login again",
+            message: "Sesi telah kedaluwarsa. Silahkan Login Kembali",
             data: null,
         });
     }
