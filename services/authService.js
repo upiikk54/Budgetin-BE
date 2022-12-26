@@ -1,9 +1,15 @@
 const userRepository = require("../repositories/userRepository");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { JWT } = require("../lib/const");
-const { passwordResetEmail } = require("../helper/nodemailer");
-const { OAuth2Client } = require("google-auth-library");
+const {
+    JWT
+} = require("../lib/const");
+const {
+    passwordResetEmail
+} = require("../helper/nodemailer");
+const {
+    OAuth2Client
+} = require("google-auth-library");
 
 const SALT_ROUND = 10;
 const upperCaseLetters = /[A-Z]/g;
@@ -14,329 +20,344 @@ const spacing = /[\s]/;
 class authService {
 
     // ------------------------- Register ------------------------- //
-
     static async handleRegister({
         userName,
         email,
         password,
         isAgree
     }) {
+        try {
+            // ------------------------- Payload Validation ------------------------- //
+            const passworUppercase = password.match(upperCaseLetters);
+            const passworNumbers = password.match(numbers);
+            const passwordSpacing = password.match(spacing);
+            const validationAddEmail = email.match(addEmail);
+            const validationDotEmail = email.match(dotEmail);
 
-        // ------------------------- Payload Validation ------------------------- //
-        const passworUppercase = password.match(upperCaseLetters);
-        const passworNumbers = password.match(numbers);
-        const passwordSpacing = password.match(spacing);
-        const validationAddEmail = email.match(addEmail);
-        const validationDotEmail = email.match(dotEmail);
+            if (!userName) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Username harus diisi.",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            } else if (userName.length >= 15) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "username maksimal 15 karakter.",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            }
 
-        if (!userName) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "userName is required",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        } else if (userName.length >= 15) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "username maximum 15 characters",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        }
+            if (!email) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Email harus diisi.",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            } else if (!validationAddEmail) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Email harus memiliki @",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            } else if (!validationDotEmail) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Email harus memiliki titik(.)",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            }
 
-        if (!email) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Email is required",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        } else if (!validationAddEmail) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Email must have @",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        } else if (!validationDotEmail) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Email must have .",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        }
+            if (!password) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Password harus diisi.",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            } else if (password.length < 8) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Password minimal 8 karakter.",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            } else if (!passworUppercase) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Password harus mengandung huruf besar.",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            } else if (!passworNumbers) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Password harus mengandung angka.",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            } else if (passwordSpacing) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Password tidak boleh diberi spasi.",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            }
 
-        if (!password) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Password is required",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        } else if (password.length < 8) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Password minimum 8 characters",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        } else if (!passworUppercase) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Password must have uppercase",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        } else if (!passworNumbers) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Password must have numbers",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        } else if (passwordSpacing) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Password cannot be spaced",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        }
+            if (!isAgree) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Persetujuan pernyataan data pribadi belum dicentang.",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            }
 
-        if (!isAgree) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Personal data statement is required",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        }
-
-        const getUserByEmail = await userRepository.getUsersByEmail({
-            email
-        });
-
-        if (getUserByEmail) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Email already used",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        } else {
-            const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
-            const createdUser = await userRepository.handleRegister({
-                userName,
-                email,
-                password: hashedPassword,
-                isAgree
+            const getUserByEmail = await userRepository.getUsersByEmail({
+                email
             });
 
-            return {
-                status: true,
-                statusCode: 201,
-                message: "Registration successful",
-                data: {
-                    registeredUsers: createdUser,
-                },
-            };
-        };
-    };
-
-    // ------------------------- End Register ------------------------- //
-
-
-    // ------------------------- Login ------------------------- //
-
-    static async handleLogin({
-        userName,
-        password,
-    }) {
-
-        // ------------------------- Payload Validation ------------------------- //
-        const passworUppercase = password.match(upperCaseLetters);
-        const passworNumbers = password.match(numbers);
-        const passwordSpacing = password.match(spacing);
-
-        if (!userName) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Username is required",
-                data: {
-                    loginUsers: null,
-                },
-            };
-        } else if (userName.length >= 15) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Username or Password is wrong",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        }
-
-        if (!password) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Password is required",
-                data: {
-                    loginUsers: null,
-                },
-            };
-        } else if (password.length < 8) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Username or Password is wrong",
-                data: {
-                    loginUsers: null,
-                },
-            };
-        } else if (!passworUppercase) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Username or Password is wrong",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        } else if (!passworNumbers) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Username or Password is wrong",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        } else if (passwordSpacing) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Username or Password is wrong",
-                data: {
-                    registeredUsers: null,
-                },
-            };
-        }
-
-        const getUsersByUsername = await userRepository.getUsersByUsername({
-            userName
-        });
-
-        if (!getUsersByUsername) {
-            return {
-                status: false,
-                statusCode: 404,
-                message: "Username or Password is wrong",
-                data: {
-                    loginUsers: null,
-                },
-            };
-        } else {
-            const isPasswordMatch = await bcrypt.compare(password, getUsersByUsername.password);
-
-            if (isPasswordMatch) {
-                const token = jwt.sign({
-                    id: getUsersByUsername.id,
-                    email: getUsersByUsername.email
-                },
-                    JWT.SECRET, {
-                    expiresIn: JWT.EXPIRED,
+            if (getUserByEmail) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Email telah digunakan.",
+                    data: {
+                        registeredUsers: null,
+                    },
+                };
+            } else {
+                const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
+                const createdUser = await userRepository.handleRegister({
+                    userName,
+                    email,
+                    password: hashedPassword,
+                    isAgree
                 });
 
                 return {
                     status: true,
-                    statusCode: 200,
-                    message: "user successfully logged in",
+                    statusCode: 201,
+                    message: "Registrasi berhasil.",
                     data: {
-                        token,
+                        registeredUsers: createdUser,
                     },
                 };
-            } else {
+            };
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Sumber tidak ada.",
+                data: {
+                    registeredUsers: null,
+                },
+            };
+        }
+    };
+    // ------------------------- End Register ------------------------- //
+
+    // ------------------------- Login ------------------------- //
+    static async handleLogin({
+        userName,
+        password,
+    }) {
+        try {
+            // ------------------------- Payload Validation ------------------------- //
+            const passworUppercase = password.match(upperCaseLetters);
+            const passworNumbers = password.match(numbers);
+            const passwordSpacing = password.match(spacing);
+
+            if (!userName) {
                 return {
-                    status: true,
+                    status: false,
                     statusCode: 400,
-                    message: "Username or Password is wrong",
+                    message: "Username harus diisi",
                     data: {
-                        user: null,
+                        loginUsers: null,
+                    },
+                };
+            } else if (userName.length >= 15) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Username atau Password salah",
+                    data: {
+                        loginUsers: null,
                     },
                 };
             }
+
+            if (!password) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Password harus diisi",
+                    data: {
+                        loginUsers: null,
+                    },
+                };
+            } else if (password.length < 8) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Username atau Password salah",
+                    data: {
+                        loginUsers: null,
+                    },
+                };
+            } else if (!passworUppercase) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Username atau Password salah",
+                    data: {
+                        loginUsers: null,
+                    },
+                };
+            } else if (!passworNumbers) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Username atau Password salah",
+                    data: {
+                        loginUsers: null,
+                    },
+                };
+            } else if (passwordSpacing) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Username atau Password salah",
+                    data: {
+                        loginUsers: null,
+                    },
+                };
+            }
+
+            const getUsersByUsername = await userRepository.getUsersByUsername({
+                userName
+            });
+
+            if (!getUsersByUsername) {
+                return {
+                    status: false,
+                    statusCode: 404,
+                    message: "Username atau Password salah",
+                    data: {
+                        loginUsers: null,
+                    },
+                };
+            } else {
+                const isPasswordMatch = await bcrypt.compare(password, getUsersByUsername.password);
+
+                if (isPasswordMatch) {
+                    const token = jwt.sign({
+                            id: getUsersByUsername.id,
+                            email: getUsersByUsername.email
+                        },
+                        JWT.SECRET, {
+                            expiresIn: JWT.EXPIRED,
+                        });
+
+                    return {
+                        status: true,
+                        statusCode: 200,
+                        message: "Pengguna berhasil masuk",
+                        data: {
+                            token,
+                        },
+                    };
+                } else {
+                    return {
+                        status: true,
+                        statusCode: 400,
+                        message: "Username atau Password salah",
+                        data: {
+                            loginUsers: null,
+                        },
+                    };
+                }
+            }
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Sumber tidak ada.",
+                data: {
+                    loginUsers: null,
+                },
+            };
         }
     };
-
     // ------------------------- End Login ------------------------- //
 
-
-
     // ------------------------- Forgot Password ------------------------- //
+    static async handleForgotPassword({
+        email,
+        otp
+    }) {
+        try {
+            // ------------------------- Payload Validation ------------------------- //
+            if (!email) {
+                return {
+                    status: false,
+                    statusCode: 400,
+                    message: "Email harus diisi.",
+                    data: {
+                        forgot_password: null,
+                    },
+                };
+            }
 
-    static async handleForgotPassword({ email, otp }) {
+            const getUser = await userRepository.getUsersByEmail({
+                email: email
+            });
 
-        // ------------------------- Payload Validation ------------------------- //
+            if (!getUser) {
+                return {
+                    status: false,
+                    statusCode: 404,
+                    message: "Email tidak terdaftar.",
+                    data: {
+                        forgot_password: null,
+                    },
+                };
+            } else {
 
-        if (!email) {
-            return {
-                status: false,
-                statusCode: 400,
-                message: "Email is required",
-                data: {
-                    forgot_password: null,
-                },
-            };
-        }
-
-        const getUser = await userRepository.getUsersByEmail({ email: email });
-
-        if (!getUser) {
-            return {
-                status: false,
-                statusCode: 404,
-                message: "Email not registered",
-                data: {
-                    user: null,
-                },
-            };
-        } else {
-
-            const emailTemplates = {
-                from: 'BudgetInApp',
-                to: email,
-                subject: 'Konfirmasi Reset Password Akun BudgetIn Kamu',
-                html:
-                    `  
+                const emailTemplates = {
+                    from: 'BudgetInApp',
+                    to: email,
+                    subject: 'Konfirmasi Reset Password Akun BudgetIn Kamu',
+                    html: `  
                         <body 
                         style="
                             background-color: #F1F6F5;
@@ -393,31 +414,42 @@ class authService {
                             </section>    
                         </body>
                 `
-            };
+                };
 
-            passwordResetEmail(emailTemplates);
+                passwordResetEmail(emailTemplates);
 
-            const updatedToken = await userRepository.handleUpdateUserToken({ email, otp });
+                const updatedToken = await userRepository.handleUpdateUserToken({
+                    email,
+                    otp
+                });
 
+                return {
+                    status: true,
+                    statusCode: 201,
+                    message: "Reset kata sandi dikirim ke email pengguna.",
+                    data: {
+                        updatedToken
+                    }
+                };
+            }
+        } catch (err) {
             return {
-                status: true,
-                statusCode: 201,
-                message: "Password reset sent to user email",
+                status: false,
+                statusCode: 401,
+                message: "Sumber tidak ada.",
                 data: {
-                    updatedToken
-                }
+                    forgot_password: null,
+                },
             };
         }
     };
-
     // ------------------------- End Forgot Password ------------------------- //
 
-
-
     // ------------------------- Reset Password ------------------------- //
-
-    static async handleResetPassword({ otp, password }) {
-
+    static async handleResetPassword({
+        otp,
+        password
+    }) {
         // ------------------------- Payload Validation ------------------------- //
         const passwordUppercase = password.match(upperCaseLetters);
         const passwordNumbers = password.match(numbers);
@@ -427,7 +459,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password is required",
+                message: "Password harus diisi.",
                 data: {
                     resetPassword: null,
                 },
@@ -436,7 +468,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password must more than 8",
+                message: "Password minimal 8 karakter.",
                 data: {
                     resetPassword: null,
                 },
@@ -445,7 +477,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password must have Uppercase",
+                message: "Password harus mengandung huruf besar.",
                 data: {
                     resetPassword: null,
                 },
@@ -454,7 +486,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password must have Number",
+                message: "Password harus mengandung angka.",
                 data: {
                     resetPassword: null,
                 },
@@ -463,7 +495,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password doesn't allow spaces",
+                message: "Password tidak boleh diberi spasi.",
                 data: {
                     resetPassword: null,
                 },
@@ -487,7 +519,7 @@ class authService {
             return {
                 status: true,
                 statusCode: 201,
-                message: "User has successfully changed the password",
+                message: "Pengguna berhasil mengubah kata sandi",
                 data: {
                     updateUserPassword,
                 },
@@ -496,20 +528,19 @@ class authService {
             return {
                 status: false,
                 statusCode: 401,
-                message: "Resource Unauthorized",
+                message: "Sumber tidak ada.",
                 data: {
                     resetPassword: null,
                 },
             };
         }
     };
-
     // ------------------------- End Reset Password ------------------------- //
 
-
     // ------------------------- Auth Login With Google ------------------------- //
-
-    static async handleLoginWithGoogle({ google_credential: googleCredential }) {
+    static async handleLoginWithGoogle({
+        google_credential: googleCredential
+    }) {
 
         try {
 
@@ -519,31 +550,37 @@ class authService {
 
             const userInfo = await client.verifyIdToken({
                 idToken: googleCredential,
-                audience:
-                    "811794821530-3gp096cooqtmdjmn3d7qg6l2l50rjpq6.apps.googleusercontent.com",
+                audience: "811794821530-3gp096cooqtmdjmn3d7qg6l2l50rjpq6.apps.googleusercontent.com",
             });
 
-            const { email, userName } = userInfo.payload;
+            const {
+                email,
+                userName
+            } = userInfo.payload;
 
-            const getUserByEmail = await userRepository.getUsersByEmail({ email: email });
+            const getUserByEmail = await userRepository.getUsersByEmail({
+                email: email
+            });
 
             if (!getUserByEmail) {
 
-                const createdUser = await userRepository.handleRegister({ userName, email });
+                const createdUser = await userRepository.handleRegister({
+                    userName,
+                    email
+                });
 
                 const token = jwt.sign({
-                    id: createdUser.id,
-                    email: createdUser.email,
-                },
-                    JWT.SECRET,
-                    {
+                        id: createdUser.id,
+                        email: createdUser.email,
+                    },
+                    JWT.SECRET, {
                         expiresIn: JWT.EXPIRED,
                     });
 
                 return {
                     status: true,
                     status_code: 201,
-                    message: "Successfully registered user!",
+                    message: "Pengguna berhasil terdaftar!",
                     data: {
                         token,
                         loginGoogle: createdUser,
@@ -555,7 +592,7 @@ class authService {
             return {
                 status: false,
                 statusCode: 401,
-                message: "Resource Unauthorized",
+                message: "Sumber tidak ada.",
                 data: {
                     loginGoolge: null,
                 },
@@ -563,7 +600,6 @@ class authService {
         }
 
     };
-
     // ------------------------- End Auth Login With Google ------------------------- //
 
 };

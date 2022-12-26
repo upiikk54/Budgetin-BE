@@ -3,6 +3,7 @@ const {
 } = require("../models")
 
 class targetRepository {
+    // ------------------------- Create Target ------------------------- //
     static async createTarget({
         user_id,
         nameTarget,
@@ -20,7 +21,9 @@ class targetRepository {
 
         return createTarget;
     };
+    // ------------------------- End Create Target ------------------------- //
 
+    // ------------------------- Update Target ------------------------- //
     static async updateTarget({
         id,
         nameTarget,
@@ -41,7 +44,9 @@ class targetRepository {
 
         return updateTarget;
     };
+    // ------------------------- End Update Target ------------------------- //
 
+    // ------------------------- Delete Target ------------------------- //
     static async deleteTarget({
         id
     }) {
@@ -53,7 +58,9 @@ class targetRepository {
 
         return deleteTarget;
     };
+    // ------------------------- End Delete Target ------------------------- //
 
+    // ------------------------- Get Target By Id ------------------------- //
     static async getTargetById({
         id
     }) {
@@ -65,6 +72,7 @@ class targetRepository {
 
         return getTarget;
     };
+    // ------------------------- End Get Target By Id ------------------------- //
 }
 
 module.exports = targetRepository;

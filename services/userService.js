@@ -9,50 +9,63 @@ const numbers = /[0-9]/g;
 class userService {
 
     // ------------------------- Get All Users ------------------------- //
-
     static async getAllUsers() {
+        try {
+            const getAllUsers = await userRepository.getAllUsers();
 
-        const getAllUsers = await userRepository.getAllUsers();
-
-        return {
-            status: true,
-            statusCode: 200,
-            message: "successfully retrieve user data",
-            data: {
-                getAllData: getAllUsers,
-            },
-        };
-
+            return {
+                status: true,
+                statusCode: 200,
+                message: "Berhasil mengambil data pengguna",
+                data: {
+                    getAllData: getAllUsers,
+                },
+            };
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Sumber tidak ada.",
+                data: {
+                    getAllData: null,
+                },
+            };
+        }
     };
-
     // ------------------------- End Get All Users ------------------------- //
 
-
     // ------------------------- Get User By Id ------------------------- //
-
     static async getUserById({
         id,
     }) {
+        try {
+            const getUserById = await userRepository.getUserById({
+                id,
+            });
 
-        const getUserById = await userRepository.getUserById({
-            id,
-        });
-
-        return {
-            status: true,
-            statusCode: 200,
-            message: "successfully retrieve user data based on id",
-            data: {
-                getUserById: getUserById,
-            },
-        };
+            return {
+                status: true,
+                statusCode: 200,
+                message: "Berhasil mengambil data pengguna berdasarkan id",
+                data: {
+                    getUserById: getUserById,
+                },
+            };
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Sumber tidak ada.",
+                data: {
+                    getUserById: null,
+                },
+            };
+        }
     };
-
     // ------------------------- End Get User By Id ------------------------- //
 
 
     // ------------------------- Update User By Id ------------------------- //
-
     static async updateUserById({
         id,
         dateOfBirth,
@@ -77,7 +90,6 @@ class userService {
                 images = getUserById.image
             }
 
-
             const updatedUser = await userRepository.updateUserById({
                 id,
                 dateOfBirth,
@@ -85,32 +97,29 @@ class userService {
                 image: images
             });
 
-
             return {
                 status: true,
                 statusCode: 200,
-                message: "user has been successfully updated",
+                message: "Pengguna telah berhasil diperbarui",
                 data: {
                     updatedUser: updatedUser,
                 },
             };
         } else {
             return {
-                status: true,
+                status: false,
                 statusCode: 401,
-                message: "Resource Unauthorized",
+                message: "Sumber tidak ada.",
                 data: {
                     updatedUser: null,
                 },
             };
         }
     };
-
     // ------------------------- End Update User By Id ------------------------- //
 
 
     // ------------------------- Reset Password By Id ------------------------- //
-
     static async resetPasswordById({
         id,
         password,
@@ -123,7 +132,7 @@ class userService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password is required",
+                message: "Password harus diisi",
                 data: {
                     registeredUsers: null,
                 },
@@ -132,7 +141,7 @@ class userService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password minimum 8 characters",
+                message: "Password minimal 8 karakter",
                 data: {
                     registeredUsers: null,
                 },
@@ -141,7 +150,7 @@ class userService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password must have uppercase",
+                message: "Password harus mengandung huruf besar",
                 data: {
                     registeredUsers: null,
                 },
@@ -150,7 +159,7 @@ class userService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password must have numbers",
+                message: "Password harus mengandung angka",
                 data: {
                     registeredUsers: null,
                 },
@@ -159,7 +168,7 @@ class userService {
             return {
                 status: false,
                 statusCode: 400,
-                message: "Password cannot be spaced",
+                message: "Password tidak boleh diberi spasi",
                 data: {
                     registeredUsers: null,
                 },
@@ -182,23 +191,22 @@ class userService {
             return {
                 status: true,
                 statusCode: 200,
-                message: "user has been successfully Reset Password",
+                message: "Pengguna telah berhasil Reset Kata Sandi",
                 data: {
                     reserPassword: reserPassword,
                 },
             };
         } else {
             return {
-                status: true,
+                status: false,
                 statusCode: 401,
-                message: "Resource Unauthorized",
+                message: "Sumber tidak ada.",
                 data: {
                     reserPassword: null,
                 },
             };
         }
     };
-
     // ------------------------- End Reset Password By Id ------------------------- //
 
     static async getTransactionIncomeByUserId({
@@ -207,22 +215,34 @@ class userService {
         priceIncome,
         dateIncome,
     }) {
-        const getTransactionIncomeByUserId = await userRepository.getTransactionIncomeByUserId({
-            id,
-            descriptionIncome,
-            priceIncome,
-            dateIncome,
-        });
+        try {
+            const getTransactionIncomeByUserId = await userRepository.getTransactionIncomeByUserId({
+                id,
+                descriptionIncome,
+                priceIncome,
+                dateIncome,
+            });
 
-        return {
-            status: true,
-            statusCode: 200,
-            message: "Your Product Success to get",
-            data: {
-                getTransactionIncomeByUserId: getTransactionIncomeByUserId,
-            },
-        };
-    }
+            return {
+                status: true,
+                statusCode: 200,
+                message: "Pemasukan berhasil didapatkan.",
+                data: {
+                    getTransactionIncomeByUserId: getTransactionIncomeByUserId,
+                },
+            };
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Sumber tidak ada.",
+                data: {
+                    getTransactionIncomeByUserId: null,
+                },
+            };
+        }
+
+    };
 
     static async getTransactionOutcomeByUserId({
         id,
@@ -230,22 +250,34 @@ class userService {
         priceOutcome,
         dateOutcome,
     }) {
-        const getTransactionOutcomeByUserId = await userRepository.getTransactionOutcomeByUserId({
-            id,
-            descriptionOutcome,
-            priceOutcome,
-            dateOutcome,
-        });
+        try {
+            const getTransactionOutcomeByUserId = await userRepository.getTransactionOutcomeByUserId({
+                id,
+                descriptionOutcome,
+                priceOutcome,
+                dateOutcome,
+            });
 
-        return {
-            status: true,
-            statusCode: 200,
-            message: "Your Product Success to get",
-            data: {
-                getTransactionOutcomeByUserId: getTransactionOutcomeByUserId,
-            },
-        };
-    }
+            return {
+                status: true,
+                statusCode: 200,
+                message: "Pengeluaran berhasil didapatkan.",
+                data: {
+                    getTransactionOutcomeByUserId: getTransactionOutcomeByUserId,
+                },
+            };
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Sumber tidak ada.",
+                data: {
+                    getTransactionOutcomeByUserId: null,
+                },
+            };
+        }
+
+    };
 
     static async getTargetByUserId({
         id,
@@ -254,23 +286,34 @@ class userService {
         dateTarget,
         image
     }) {
-        const getTargetByUserId = await userRepository.getTargetByUserId({
-            id,
-            nameTarget,
-            nominalTarget,
-            dateTarget,
-            image
-        });
+        try {
+            const getTargetByUserId = await userRepository.getTargetByUserId({
+                id,
+                nameTarget,
+                nominalTarget,
+                dateTarget,
+                image
+            });
 
-        return {
-            status: true,
-            statusCode: 200,
-            message: "Berhasil menampilkan tujuan",
-            data: {
-                getTargetByUserId: getTargetByUserId,
-            },
+            return {
+                status: true,
+                statusCode: 200,
+                message: "Berhasil menampilkan tujuan",
+                data: {
+                    getTargetByUserId: getTargetByUserId,
+                },
+            };
+        } catch (err) {
+            return {
+                status: false,
+                statusCode: 401,
+                message: "Sumber tidak ada.",
+                data: {
+                    getTargetByUserId: null,
+                },
+            };
         };
-    }
+    };
 };
 
 module.exports = userService;

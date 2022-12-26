@@ -1,4 +1,5 @@
 const sequelize = require("sequelize");
+const { Op } = require("sequelize");
 const {
     transactionIncome,
     transactionOutcome,
@@ -6,6 +7,7 @@ const {
 } = require("../models");
 
 class transactionRepository {
+    // ------------------------- Create Transaction Income ------------------------- //
     static async createTransactionIncome({
         user_id,
         priceIncome,
@@ -23,13 +25,41 @@ class transactionRepository {
 
         return createTransactionIncome;
     };
+    // ------------------------- End Create Transaction Income ------------------------- //
 
-    static async getAllTransactionIncome() {
-        const getAllTransactionIncome = await transactionIncome.findAll();
+    // ------------------------- Get All and Filtered Transaction Income ------------------------- //
+    static async getAllTransactionIncome({
+        descriptionIncome, priceIncome
+    }) {
+        const query = {
+            where: {},
+            like: {}
+        }
+
+        if (descriptionIncome) {
+            const searchByDescription = await transactionIncome.findAll({
+                where: {
+                    [Op.or]: [
+                        { descriptionIncome: { [Op.like]: '%' + descriptionIncome + '%' } },
+                    ]
+                },
+                limit: 10,
+            });
+
+            return searchByDescription;
+        }
+
+        if (priceIncome) {
+            query.where = { ...query.where, priceIncome }
+        }
+
+        const getAllTransactionIncome = await transactionIncome.findAll(query);
 
         return getAllTransactionIncome;
     };
+    // ------------------------- End Get All and Filtered Transaction Income ------------------------- //
 
+    // ------------------------- Get Transaction Income By Id ------------------------- //
     static async getTransactionIncomeById({
         id
     }) {
@@ -51,7 +81,9 @@ class transactionRepository {
 
         return getTransactionIncomeById;
     };
+    // ------------------------- End Get Transaction Income By Id ------------------------- //
 
+    // ------------------------- Update Transaction Income By Id ------------------------- //
     static async updateTransactionIncomeById({
         id,
         priceIncome,
@@ -72,7 +104,9 @@ class transactionRepository {
 
         return updateTransactionIncomeById;
     };
+    // ------------------------- End Update Transaction Income By Id ------------------------- //
 
+    // ------------------------- Delete Transaction Income By User Id ------------------------- //
     static async deleteTransactionIncomeByUserId({
         id
     }) {
@@ -84,7 +118,9 @@ class transactionRepository {
 
         return deleteTransactionIncomeByUserId;
     };
+    // ------------------------- End Delete Transaction Income By User Id ------------------------- //
 
+    // ------------------------- Create Transaction Outcome ------------------------- //
     static async createTransactionOutcome({
         user_id,
         priceOutcome,
@@ -102,13 +138,41 @@ class transactionRepository {
 
         return createTransactionOutcome;
     };
+    // ------------------------- End Create Transaction Outcome ------------------------- //
 
-    static async getAllTransactionOutcome() {
-        const getAllTransactionOutcome = await transactionOutcome.findAll();
+    // ------------------------- Get All and Filtered Transaction Outcome ------------------------- //
+    static async getAllTransactionOutcome({
+        descriptionOutcome, priceOutcome
+    }) {
+
+        const query = {
+            where: {},
+            like: {}
+        }
+
+        if (descriptionOutcome) {
+            const searchByDescription = await transactionOutcome.findAll({
+                where: {
+                    [Op.or]: [
+                        { descriptionOutcome: { [Op.like]: '%' + descriptionOutcome + '%' } },
+                    ]
+                },
+                limit: 10,
+            });
+
+            return searchByDescription;
+        }
+
+        if (priceOutcome) {
+            query.where = { ...query.where, priceOutcome }
+        }
+        const getAllTransactionOutcome = await transactionOutcome.findAll(query);
 
         return getAllTransactionOutcome;
     };
+    // ------------------------- End Get All and Filtered Transaction Outcome ------------------------- //
 
+    // ------------------------- Get Transaction Outcome By Id ------------------------- //
     static async getTransactionOutcomeById({
         id
     }) {
@@ -130,7 +194,9 @@ class transactionRepository {
 
         return getTransactionOutcomeById;
     };
+    // ------------------------- End Get Transaction Outcome By Id ------------------------- //
 
+    // ------------------------- Update Transaction Outcome By Id ------------------------- //
     static async updateTransactionOutcomeById({
         id,
         priceOutcome,
@@ -151,7 +217,9 @@ class transactionRepository {
 
         return updateTransactionOutcomeById;
     };
+    // ------------------------- End Update Transaction Outcome By Id ------------------------- //
 
+    // ------------------------- Delete Transaction Outcome By User Id ------------------------- //
     static async deleteTransactionOutcomeByUserId({
         id
     }) {
@@ -163,6 +231,35 @@ class transactionRepository {
 
         return deleteTransactionOutcomeByUserId;
     };
+    // ------------------------- End Delete Transaction Outcome By User Id ------------------------- //
+
+    // ------------------------- Total Income ------------------------- //
+    static async totalIncome({
+        user_id,
+    }) {
+        const totalIncome = await transactionIncome.findAll({
+            attributes: [[sequelize.fn('sum', sequelize.col('priceIncome')), 'totalIncome']],
+            where: {user_id},
+            raw: true
+        })
+        
+        return totalIncome
+    };
+    // ------------------------- End Total Income ------------------------- //
+
+    // ------------------------- Total Outcome ------------------------- //
+    static async totalOutcome({
+        user_id,
+    }) {
+        const totalOutcome = await transactionOutcome.findAll({
+            attributes: [[sequelize.fn('sum', sequelize.col('priceOutcome')), 'totalOutcome']],
+            where: {user_id},
+            raw: true
+        })
+        
+        return totalOutcome
+    };
+    // ------------------------- End Total Outcome ------------------------- //
 }
 
 module.exports = transactionRepository;
