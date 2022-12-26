@@ -1,0 +1,1261 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "BudgetinApp",
+    "contact": {}
+  },
+  "host": "localhost:8901",
+  "basePath": "/",
+  "securityDefinitions": {},
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "RegisteredUsers",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "RegisteredUsers",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "default": "Bearer {token}",
+            "type": "string"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/RegisteredUsersRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "loginUsers",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "loginUsers",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "default": "Bearer {token}",
+            "type": "string"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/loginUsersRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "CurrentUsers",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "CurrentUsers",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/forgotpassword": {
+      "put": {
+        "summary": "Handle Forgot Password",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "HandleForgotPassword",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "default": "Bearer {token}",
+            "type": "string"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/HandleForgotPasswordRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/auth/resetpassword": {
+      "put": {
+        "summary": "Reset Password",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "ResetPassword",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "default": "Bearer {token}",
+            "type": "string"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "summary": "getAllUsers",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "getAllUsers",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "default": "Bearer {token}",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "summary": "getUserById",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "getUserById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "summary": "updateUserById",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "updateUserById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          },
+          {
+            "name": "dateOfBirth",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "gender",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transaction/create": {
+      "post": {
+        "summary": "Create Income",
+        "tags": [
+          "transaction Income"
+        ],
+        "operationId": "CreateIncome",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreateIncomeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transaction/update/{id}": {
+      "put": {
+        "summary": "Update Income By Id",
+        "tags": [
+          "transaction Income"
+        ],
+        "operationId": "UpdateIncomeById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UpdateIncomeByIdRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/users/{id}/transaction": {
+      "get": {
+        "summary": "Get Transaction By User Id",
+        "tags": [
+          "transaction Income"
+        ],
+        "operationId": "GetTransactionByUserId",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transaction/delete/{id}": {
+      "delete": {
+        "summary": "Delete Transaction Income By User Id",
+        "tags": [
+          "transaction Income"
+        ],
+        "operationId": "DeleteTransactionIncomeByUserId",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transaction/totalIncome": {
+      "get": {
+        "summary": "total income",
+        "tags": [
+          "transaction Income"
+        ],
+        "operationId": "totalincome",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transaction/filteredIncome": {
+      "get": {
+        "summary": "filtered Income",
+        "tags": [
+          "transaction Income"
+        ],
+        "operationId": "filteredIncome",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "default": "Bearer {token}",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/api/transactionOutcome/create": {
+      "post": {
+        "summary": "Create Outcome",
+        "tags": [
+          "Transaction Outcome"
+        ],
+        "operationId": "CreateOutcome",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreateOutcomeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transactionOutcome/update/{id}": {
+      "put": {
+        "summary": "Update Outcome",
+        "tags": [
+          "Transaction Outcome"
+        ],
+        "operationId": "UpdateOutcome",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UpdateOutcomeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/users/{id}/transactionOutcome": {
+      "get": {
+        "summary": "Get Transaction Outcome By User ID",
+        "tags": [
+          "Transaction Outcome"
+        ],
+        "operationId": "GetTransactionOutcomeByUserID",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transactionOutcome/delete/{id}": {
+      "delete": {
+        "summary": "Delete Outcome",
+        "tags": [
+          "Transaction Outcome"
+        ],
+        "operationId": "DeleteOutcome",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transaction/filteredOutcome": {
+      "get": {
+        "summary": "filtered Outcome",
+        "tags": [
+          "Transaction Outcome"
+        ],
+        "operationId": "filteredIncome",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "default": "Bearer {token}",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/api/transaction/totalOutcome": {
+      "get": {
+        "summary": "total Outcome",
+        "tags": [
+          "Transaction Outcome"
+        ],
+        "operationId": "totalincome",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/targets/create": {
+      "post": {
+        "summary": "Create Target",
+        "tags": [
+          "Targets"
+        ],
+        "operationId": "CreateTarget",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "nameTarget",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "nominalTarget",
+            "in": "formData",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          },
+          {
+            "name": "dateTarget",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/users/{id}/targets": {
+      "get": {
+        "summary": "Get Target By User Id",
+        "tags": [
+          "Targets"
+        ],
+        "operationId": "GetTargetByUserId",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/target/{id}": {
+      "get": {
+        "summary": "Get Target By Id",
+        "tags": [
+          "Targets"
+        ],
+        "operationId": "GetTargetById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/targets/update/{id}": {
+      "put": {
+        "summary": "Update Target",
+        "tags": [
+          "Targets"
+        ],
+        "operationId": "UpdateTarget",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          },
+          {
+            "name": "nameTarget",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "nominalTarget",
+            "in": "formData",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/target/delete/{id}": {
+      "delete": {
+        "summary": "Delete Target",
+        "tags": [
+          "Targets"
+        ],
+        "operationId": "DeleteTarget",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transactionTarget/create": {
+      "post": {
+        "summary": "Create transaction target",
+        "tags": [
+          "TransactionTarget"
+        ],
+        "operationId": "Createtransactiontarget",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreatetransactiontargetRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transactionTarget/update/{id}": {
+      "put": {
+        "summary": "Update transaction target",
+        "tags": [
+          "TransactionTarget"
+        ],
+        "operationId": "Updatetransactiontarget",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UpdatetransactiontargetRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transactionTarget/{id}": {
+      "get": {
+        "summary": "Get Transaction Target By Id",
+        "tags": [
+          "TransactionTarget"
+        ],
+        "operationId": "GetTransactionTargetById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/transactionTarget/totalTransactionTarget/{id}": {
+      "get": {
+        "summary": "total Transaction Target",
+        "tags": [
+          "TransactionTarget"
+        ],
+        "operationId": "totalincome",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "definitions": {
+    "RegisteredUsersRequest": {
+      "title": "RegisteredUsersRequest",
+      "example": {
+        "userName": "upik",
+        "email": "pradityaluthfi54@gmail.com",
+        "password": "Upik12345",
+        "isAgree": "true"
+      },
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "isAgree": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "userName",
+        "email",
+        "password",
+        "isAgree"
+      ]
+    },
+    "loginUsersRequest": {
+      "title": "loginUsersRequest",
+      "example": {
+        "userName": "upik",
+        "password": "Upik12345"
+      },
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "userName",
+        "password"
+      ]
+    },
+    "HandleForgotPasswordRequest": {
+      "title": "HandleForgotPasswordRequest",
+      "example": {
+        "email": "pradityaluthfi54@gmail.com"
+      },
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "email"
+      ]
+    },
+    "ResetPasswordRequest": {
+      "title": "ResetPasswordRequest",
+      "example": {
+        "otp": "7343",
+        "password": "Upik54321"
+      },
+      "type": "object",
+      "properties": {
+        "otp": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "otp",
+        "password"
+      ]
+    },
+    "CreateIncomeRequest": {
+      "title": "CreateIncomeRequest",
+      "example": {
+        "priceIncome": 123456,
+        "categoryIncome": "hobi",
+        "dateIncome": "2001-05-12",
+        "descriptionIncome": "coba ae ni mah"
+      },
+      "type": "object",
+      "properties": {
+        "priceIncome": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "categoryIncome": {
+          "type": "string"
+        },
+        "dateIncome": {
+          "type": "string"
+        },
+        "descriptionIncome": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "priceIncome",
+        "categoryIncome",
+        "dateIncome",
+        "descriptionIncome"
+      ]
+    },
+    "UpdateIncomeByIdRequest": {
+      "title": "UpdateIncomeByIdRequest",
+      "example": {
+        "priceIncome": 50000,
+        "categoryIncome": "hobi",
+        "dateIncome": "2001-05-12",
+        "descriptionIncome": "coba update"
+      },
+      "type": "object",
+      "properties": {
+        "priceIncome": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "categoryIncome": {
+          "type": "string"
+        },
+        "dateIncome": {
+          "type": "string"
+        },
+        "descriptionIncome": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "priceIncome",
+        "categoryIncome",
+        "dateIncome",
+        "descriptionIncome"
+      ]
+    },
+    "CreateOutcomeRequest": {
+      "title": "CreateOutcomeRequest",
+      "example": {
+        "priceOutcome": 123456,
+        "categoryOutcome": "hobi",
+        "dateOutcome": "2001-05-12",
+        "descriptionOutcome": "coba ae ni mah"
+      },
+      "type": "object",
+      "properties": {
+        "priceOutcome": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "categoryOutcome": {
+          "type": "string"
+        },
+        "dateOutcome": {
+          "type": "string"
+        },
+        "descriptionOutcome": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "priceOutcome",
+        "categoryOutcome",
+        "dateOutcome",
+        "descriptionOutcome"
+      ]
+    },
+    "UpdateOutcomeRequest": {
+      "title": "UpdateOutcomeRequest",
+      "example": {
+        "priceOutcome": 232331312,
+        "categoryOutcome": "hobi",
+        "dateOutcome": "2001-05-12",
+        "descriptionOutcome": "coba ae ni mah"
+      },
+      "type": "object",
+      "properties": {
+        "priceOutcome": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "categoryOutcome": {
+          "type": "string"
+        },
+        "dateOutcome": {
+          "type": "string"
+        },
+        "descriptionOutcome": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "priceOutcome",
+        "categoryOutcome",
+        "dateOutcome",
+        "descriptionOutcome"
+      ]
+    },
+    "CreatetransactiontargetRequest": {
+      "title": "CreatetransactiontargetRequest",
+      "example": {
+        "target_id": 2,
+        "nominalTransactionTarget": 1200000,
+        "dateTransactionTarget": "2001-05-12"
+      },
+      "type": "object",
+      "properties": {
+        "target_id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "nominalTransactionTarget": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "dateTransactionTarget": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_id",
+        "nominalTransactionTarget",
+        "dateTransactionTarget"
+      ]
+    },
+    "UpdatetransactiontargetRequest": {
+      "title": "UpdatetransactiontargetRequest",
+      "example": {
+        "nominalTransactionTarget": 150000,
+        "dateTransactionTarget": "2001-05-12"
+      },
+      "type": "object",
+      "properties": {
+        "nominalTransactionTarget": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "dateTransactionTarget": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "nominalTransactionTarget",
+        "dateTransactionTarget"
+      ]
+    }
+  },
+  "security": [],
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Users"
+    },
+    {
+      "name": "transaction Income"
+    },
+    {
+      "name": "Transaction Outcome"
+    },
+    {
+      "name": "Targets"
+    },
+    {
+      "name": "TransactionTarget"
+    }
+  ]
+}
