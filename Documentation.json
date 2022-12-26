@@ -612,7 +612,7 @@
         "tags": [
           "Transaction Outcome"
         ],
-        "operationId": "filteredIncome",
+        "operationId": "filteredOutcome",
         "deprecated": false,
         "produces": [
           "application/json"
@@ -640,7 +640,7 @@
         "tags": [
           "Transaction Outcome"
         ],
-        "operationId": "totalincome",
+        "operationId": "totalOutcome",
         "deprecated": false,
         "produces": [
           "application/json"
@@ -953,7 +953,7 @@
         "tags": [
           "TransactionTarget"
         ],
-        "operationId": "totalincome",
+        "operationId": "totalTransactionTarget",
         "deprecated": false,
         "produces": [
           "application/json"
